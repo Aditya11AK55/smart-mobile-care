@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Mobile Care & Accessories</title>
+    <style>
+        /* CSS for Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .service-card {
+            background: #eef2f7;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid #dcdcdc;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #0056b3;
+            border-bottom: 2px solid #eef2f7;
+            padding-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background-color: #25D366; /* WhatsApp Green Color */
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            background-color: #128C7E;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>    
+
+
+   <header>
+        <h1>Smart Mobile Care</h1>
+        <p>All Mobile Repairing, Covers, Tempered Glass & Software Solutions</p>
+    </header>
+
+    <div class="container">
+        <h2>Our Best Services</h2>
+        <div class="services-grid">
+            <div class="service-card">📱 Mobile Covers</div>
+            <div class="service-card">💎 Tempered Glass</div>
+            <div class="service-card">🛠️ Display & Battery Repair</div>
+            <div class="service-card">🔓 Software & Unlocking</div>
+        </div>
+
+        <h2>Book Service / Order Accessories</h2>
+        <!-- Form for Order/Booking -->
+        <form id="bookingForm">
+            <div class="form-group">
+                <label for="name">Your Name (आपका नाम):</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phoneModel">Mobile Brand & Model (मोबाइल का मॉडल):</label>
+                <input type="text" id="phoneModel" placeholder="e.g., Realme 11 Pro, iPhone 13" required>
+            </div>
+
+            <div class="form-group">
+                <label for="serviceType">What do you need? (आपको क्या चाहिए?):</label>
+                <select id="serviceType" required>
+                    <option value="">-- Select Option --</option>
+                    <option value="Mobile Cover">Premium Mobile Cover</option>
+                    <option value="Tempered Glass">OG Tempered Glass</option>
+                    <option value="Screen/Display Repair">Screen/Display Replacement</option>
+                    <option value="Battery Issue">New Battery Installation</option>
+                    <option value="Software/Unlocking">Phone Unlock / Software Flash</option>
+                    <option value="Other">Other Issues (Write below)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">More Details / Message (कोई और जानकारी):</label>
+                <textarea id="message" rows="3" placeholder="Describe your requirement..."></textarea>
+            </div>
+
+            <button type="button" onclick="sendToWhatsApp()">
+                Send Order on WhatsApp 🚀
+            </button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Smart Mobile Care. Developed for Local Businesses.</p>
+    </footer>
+
+    <script>
+        // JavaScript function to redirect data to WhatsApp
+        function sendToWhatsApp() {
+            // 1. Enter the shopkeeper's phone number here with country code (without + sign)
+            // Example: 919876543210 (91 is India's country code)
+            const shopPhoneNumber = "910000000000"; 
+
+            // 2. Get form values
+            const name = document.getElementById('name').value;
+            const phoneModel = document.getElementById('phoneModel').value;
+            const serviceType = document.getElementById('serviceType').value;
+            const message = document.getElementById('message').value;
+
+            // Validation check
+            if (!name || !phoneModel || !serviceType) {
+                alert("Please fill all required fields!");
+                return;
+            }
+
+            // 3. Create the WhatsApp Message Text
+            const whatsappMessage = `*New Order/Booking From Website*%0A%0A` +
+                                    `*Name:* ${encodeURIComponent(name)}%0A` +
+                                    `*Phone Model:* ${encodeURIComponent(phoneModel)}%0A` +
+                                    `*Requirement:* ${encodeURIComponent(serviceType)}%0A` +
+                                    `*Details:* ${encodeURIComponent(message || 'None')}`;
+
+            // 4. Open WhatsApp URL
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${shopPhoneNumber}&text=${whatsappMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+
+</body>
+</html>
