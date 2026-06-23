@@ -245,40 +245,37 @@
                 <!-- Brand Dropdown -->
                 <div class="form-group">
                     <label for="deviceBrand">Select Mobile Brand:</label>
-                    <select id="deviceBrand" required>
+                    <select id="deviceBrand" onchange="updateModels()" required>
                         <option value="">-- Select Brand --</option>
                         <option value="Realme">Realme</option>
                         <option value="Vivo">Vivo</option>
                         <option value="Oppo">Oppo</option>
-                        <option value="Xiaomi / Mi">Xiaomi / Mi</option>
-                        <option value="Redmi">Redmi</option>
-                        <option value="POCO">POCO</option>
+                        <option value="Xiaomi / Redmi">Xiaomi / Redmi</option>
                         <option value="Samsung">Samsung</option>
                         <option value="Apple (iPhone)">Apple (iPhone)</option>
                         <option value="OnePlus">OnePlus</option>
                         <option value="Infinix">Infinix</option>
                         <option value="Tecno">Tecno</option>
                         <option value="Motorola">Motorola</option>
+                        <option value="POCO">POCO</option>
                         <option value="IQOO">IQOO</option>
-                        <option value="Nothing">Nothing</option>
-                        <option value="Google Pixel">Google Pixel</option>
                         <option value="Lava">Lava</option>
-                        <option value="Nokia">Nokia</option>
-                        <option value="Asus">Asus</option>
-                        <option value="Sony">Sony</option>
-                        <option value="LG">LG</option>
-                        <option value="Honor">Honor</option>
-                        <option value="Huawei">Huawei</option>
-                        <option value="Micromax">Micromax</option>
-                        <option value="Itel">Itel</option>
-                        <option value="HTC">HTC</option>
+                        <option value="Nothing">Nothing</option>
                     </select>
                 </div>
 
-                <!-- Model Input -->
+                <!-- Model Dynamic Dropdown -->
                 <div class="form-group">
-                    <label for="deviceModel">Type Mobile Model:</label>
-                    <input type="text" id="deviceModel" placeholder="e.g., 11 Pro, V29, Note 30" required>
+                    <label for="deviceModel">Select Mobile Model:</label>
+                    <select id="deviceModel" required>
+                        <option value="">-- First Select a Brand --</option>
+                    </select>
+                </div>
+
+                <!-- Custom Input if Model is not listed -->
+                <div class="form-group" id="customModelGroup" style="display: none;">
+                    <label for="customModelName">Type Your Model Name:</label>
+                    <input type="text" id="customModelName" placeholder="Enter your specific model">
                 </div>
 
                 <!-- Extra Option for Repair and Software -->
@@ -307,6 +304,78 @@
         // REMEMBER TO ENTER THE SHOPKEEPER'S WHATSAPP NUMBER HERE (With 91)
         const shopPhoneNumber = "910000000000"; 
 
+        // Comprehensive Model Data Matrix (Massive Timeline 2020-2026)
+        const modelData = {
+            "Apple (iPhone)": [
+                "iPhone 17 Pro Max", "iPhone 17 Pro", "iPhone 17", "iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16",
+                "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15", "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14",
+                "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13 Mini", "iPhone 13", "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12 Mini", "iPhone 12",
+                "iPhone SE (2022)", "iPhone SE (2020)", "iPhone 11 Pro Max", "iPhone 11 Pro", "iPhone 11"
+            ],
+            "Samsung": [
+                "Galaxy S26 Ultra", "Galaxy S26+", "Galaxy S26", "Galaxy S25 Ultra", "Galaxy S25", "Galaxy S24 Ultra", "Galaxy S24+", "Galaxy S24", 
+                "Galaxy S23 Ultra", "Galaxy S23", "Galaxy S22 Ultra", "Galaxy S22", "Galaxy S21 Ultra", "Galaxy S21 FE", "Galaxy S20 Ultra", "Galaxy S20 FE",
+                "Galaxy Note 20 Ultra", "Galaxy A55 5G", "Galaxy A54 5G", "Galaxy A53 5G", "Galaxy A52s 5G", "Galaxy A51", "Galaxy A35", "Galaxy A34", 
+                "Galaxy M35 5G", "Galaxy M34 5G", "Galaxy M33 5G", "Galaxy M32", "Galaxy M31s", "Galaxy F54", "Galaxy F34"
+            ],
+            "Realme": [
+                "Realme 14 Pro+", "Realme 13 Pro+", "Realme 13 5G", "Realme 12 Pro+", "Realme 12 5G", "Realme 11 Pro+", "Realme 11 5G", 
+                "Realme 10 Pro+", "Realme 10 5G", "Realme 9 Pro+", "Realme 9 5G", "Realme 8 Pro", "Realme 8 5G", "Realme 7 Pro", "Realme 6 Pro",
+                "Realme C67 5G", "Realme C55", "Realme C35", "Realme C30", "Realme C25s", "Realme C21y", "Realme C11",
+                "Realme Narzo 70 Pro", "Realme Narzo 60", "Realme Narzo 50", "Realme Narzo 30", "Realme GT 5", "Realme GT Neo 3"
+            ],
+            "Vivo": [
+                "Vivo V40 Pro", "Vivo V30 Pro", "Vivo V30e", "Vivo V29 Pro", "Vivo V29e", "Vivo V27 Pro", "Vivo V25 Pro", "Vivo V23 Pro", 
+                "Vivo V21 5G", "Vivo V20 Pro", "Vivo V19", "Vivo T3 Pro", "Vivo T2x 5G", "Vivo T1 5G", "Vivo Y200 Pro", "Vivo Y100", 
+                "Vivo Y56 5G", "Vivo Y75", "Vivo Y21", "Vivo Y20G", "Vivo Y12s", "Vivo X100 Pro", "Vivo X90 Pro", "Vivo X80 Pro", "Vivo X60"
+            ],
+            "Oppo": [
+                "Oppo Reno 12 Pro", "Oppo Reno 11 Pro", "Oppo Reno 10 Pro+", "Oppo Reno 8 Pro", "Oppo Reno 7 5G", "Oppo Reno 6 Pro", "Oppo Reno 5 Pro",
+                "Oppo F27 Pro+", "Oppo F25 Pro", "Oppo F23 5G", "Oppo F21 Pro 5G", "Oppo F19 Pro+", "Oppo F17 Pro", "Oppo F15",
+                "Oppo A78 5G", "Oppo A58", "Oppo A54", "Oppo A53", "Oppo A17", "Oppo A16", "Oppo K10 5G"
+            ],
+            "Xiaomi / Redmi": [
+                "Xiaomi 14 Ultra", "Xiaomi 13 Pro", "Xiaomi 12 Pro", "Mi 11 Ultra", "Mi 10T Pro",
+                "Redmi Note 14 Pro+", "Redmi Note 13 Pro+", "Redmi Note 13 5G", "Redmi Note 12 Pro+", "Redmi Note 12 5G", "Redmi Note 11 Pro+", 
+                "Redmi Note 11 5G", "Redmi Note 10 Pro Max", "Redmi Note 10S", "Redmi Note 9 Pro Max", "Redmi Note 9",
+                "Redmi 13C 5G", "Redmi 12 5G", "Redmi 11 Prime 5G", "Redmi 10 Power", "Redmi 9 Prime", "Redmi A3", "Redmi A2"
+            ],
+            "OnePlus": [
+                "OnePlus 13", "OnePlus 12", "OnePlus 12R", "OnePlus 11", "OnePlus 11R", "OnePlus 10 Pro", "OnePlus 10R", 
+                "OnePlus 9 Pro", "OnePlus 9R", "OnePlus 8T", "OnePlus 8 Pro", "OnePlus Nord CE 4", "OnePlus Nord CE 3 Lite", 
+                "OnePlus Nord CE 2 5G", "OnePlus Nord 3 5G", "OnePlus Nord 2T", "OnePlus Nord CE 5G", "OnePlus Nord"
+            ],
+            "Infinix": [
+                "Infinix Note 40 Pro+", "Infinix Note 30 5G", "Infinix Note 12 Pro", "Infinix Note 11", "Infinix Note 10 Pro",
+                "Infinix Hot 40 Pro", "Infinix Hot 30 5G", "Infinix Hot 20 5G", "Infinix Hot 12 Play", "Infinix Hot 11s", "Infinix Hot 10 Play",
+                "Infinix Zero 30 5G", "Infinix Zero Ultra", "Infinix Zero 5G", "Infinix Smart 8 Plus", "Infinix Smart 7", "Infinix Smart 6"
+            ],
+            "POCO": [
+                "POCO X6 Pro 5G", "POCO X5 Pro 5G", "POCO X4 Pro 5G", "POCO X3 Pro", "POCO F6 Pro", "POCO F5", "POCO F4 5G",
+                "POCO M6 Pro 5G", "POCO M5", "POCO M4 Pro 5G", "POCO M3 Pro", "POCO C65", "POCO C55", "POCO C31"
+            ],
+            "IQOO": [
+                "IQOO 12", "IQOO 11 5G", "IQOO 9 Pro", "IQOO 7 Legend", "IQOO 3", "IQOO Neo 9 Pro", "IQOO Neo 7 Pro", "IQOO Neo 6",
+                "IQOO Z9 5G", "IQOO Z7 Pro 5G", "IQOO Z6 5G", "IQOO Z5", "IQOO Z3 5G"
+            ],
+            "Tecno": [
+                "Tecno Pova 6 Pro 5G", "Tecno Pova 5 Pro", "Tecno Pova 3", "Tecno Pova 2", "Tecno Camon 30 Premier", "Tecno Camon 20 Pro", 
+                "Tecno Camon 19 Neo", "Tecno Phantom X2 Pro", "Tecno Spark 20 Pro+", "Tecno Spark 10 Pro", "Tecno Spark 8 Pro", "Tecno Spark 7"
+            ],
+            "Motorola": [
+                "Moto Edge 50 Ultra", "Moto Edge 50 Pro", "Moto Edge 40 Neo", "Moto Edge 30 Ultra", "Moto Edge 20 Pro",
+                "Moto G85 5G", "Moto G54 5G", "Moto G84 5G", "Moto G62 5G", "Moto G52", "Moto G51 5G", "Moto G40 Fusion",
+                "Moto E13", "Moto E40"
+            ],
+            "Lava": [
+                "Lava Agni 3", "Lava Agni 2 5G", "Lava Agni 5G", "Lava Blaze Curve 5G", "Lava Blaze 2 5G", "Lava Blaze 5G",
+                "Lava Storm 5G", "Lava Yuva 3 Pro", "Lava Yuva 2 Pro", "Lava Yuva Premium"
+            ],
+            "Nothing": [
+                "Nothing Phone (2a) Plus", "Nothing Phone (2a)", "Nothing Phone (2)", "Nothing Phone (1)"
+            ]
+        };
+
         let currentServiceKey = "";
 
         function openService(serviceKey, title, description) {
@@ -319,6 +388,10 @@
             document.getElementById('serviceForm').reset();
             document.getElementById('resultBox').style.display = 'none';
             document.getElementById('actionButtonArea').innerHTML = '';
+            document.getElementById('customModelGroup').style.display = 'none';
+            
+            const modelSelect = document.getElementById('deviceModel');
+            modelSelect.innerHTML = '<option value="">-- First Select a Brand --</option>';
 
             const extraGroup = document.getElementById('extraServiceGroup');
             const extraOption = document.getElementById('extraOption');
@@ -348,6 +421,43 @@
             }
         }
 
+        function updateModels() {
+            const brandSelect = document.getElementById('deviceBrand');
+            const modelSelect = document.getElementById('deviceModel');
+            const customModelGroup = document.getElementById('customModelGroup');
+            
+            const selectedBrand = brandSelect.value;
+            
+            customModelGroup.style.display = 'none';
+            document.getElementById('customModelName').required = false;
+
+            if (!selectedBrand) {
+                modelSelect.innerHTML = '<option value="">-- First Select a Brand --</option>';
+                return;
+            }
+
+            let optionsHtml = '<option value="">-- Select Model --</option>';
+            
+            if (modelData[selectedBrand]) {
+                modelData[selectedBrand].forEach(model => {
+                    optionsHtml += `<option value="${model}">${model}</option>`;
+                });
+            }
+            
+            optionsHtml += `<option value="Other">Other Model (Not Listed)</option>`;
+            modelSelect.innerHTML = optionsHtml;
+
+            modelSelect.onchange = function() {
+                if (modelSelect.value === "Other") {
+                    customModelGroup.style.display = 'block';
+                    document.getElementById('customModelName').required = true;
+                } else {
+                    customModelGroup.style.display = 'none';
+                    document.getElementById('customModelName').required = false;
+                }
+            };
+        }
+
         function goBack() {
             document.getElementById('serviceView').style.display = 'none';
             document.getElementById('homeView').style.display = 'block';
@@ -355,12 +465,16 @@
 
         function checkAvailability() {
             const brand = document.getElementById('deviceBrand').value;
-            const model = document.getElementById('deviceModel').value;
+            let model = document.getElementById('deviceModel').value;
             const resultBox = document.getElementById('resultBox');
             const actionArea = document.getElementById('actionButtonArea');
 
+            if (model === "Other") {
+               model = document.getElementById('customModelName').value;
+            }
+
             if (!brand || !model) {
-                alert("Please select brand and type your model name!");
+                alert("Please select both brand and model!");
                 return;
             }
 
