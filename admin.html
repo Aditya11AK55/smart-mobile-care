@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopkeeper Admin - Smart Mobile Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========================================= */
+        /* BASE & LOGIN STYLES                       */
+        /* ========================================= */
+        :root {
+            --primary-color: #4f46e5;
+            --success-color: #22c55e;
+            --danger-color: #ef4444;
+            --text-color: #1f2937;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+
+        .login-container { background-color: var(--card-bg); width: 100%; max-width: 380px; padding: 30px 25px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #e5e7eb; }
+        .login-header { text-align: center; margin-bottom: 25px; }
+        .login-header i { font-size: 40px; color: var(--primary-color); margin-bottom: 10px; }
+        .login-header h2 { font-size: 20px; font-weight: 700; color: #111827; }
+        .login-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
+
+        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 11px; font-weight: 700; color: #4b5563; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input { padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+        .form-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        
+        .btn-login { background-color: var(--primary-color); color: white; border: none; width: 100%; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 10px; transition: background-color 0.2s; }
+        .btn-login:active { transform: scale(0.98); }
+        .error-msg { color: var(--danger-color); font-size: 13px; text-align: center; margin-top: 10px; display: none; font-weight: 500; }
+
+        /* ========================================= */
+        /* DASHBOARD & COMPONENT STYLES              */
+        /* ========================================= */
+        .dashboard-container { display: none; width: 100%; max-width: 500px; flex-direction: column; gap: 20px; }
+        .dash-header { background: linear-gradient(135deg, #1f2937, #111827); color: white; padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .dash-title h2 { font-size: 18px; font-weight: 700; }
+        .dash-title p { font-size: 12px; opacity: 0.7; }
+        
+        /* Toggle Switch */
+        .status-toggle { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 50px; }
+        .status-toggle span { font-size: 12px; font-weight: 600; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success-color); }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        /* Sections */
+        .dash-section { background-color: var(--card-bg); padding: 18px; border-radius: 20px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px rgba(0,0,0,0.01); }
+        .section-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-hdr h3 { font-size: 13px; font-weight: 700; color: #4b5563; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+        
+        .btn-add-toggle { background-color: var(--primary-color); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        
+        /* Add Form */
+        .add-form-box { display: none; flex-direction: column; gap: 10px; margin-bottom: 15px; padding: 14px; background: #f9fafb; border-radius: 12px; border: 1px dashed #d1d5db; animation: slideUp 0.2s ease-out; }
+        @keyframes slideUp { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .form-row { display: flex; gap: 10px; }
+        .form-row input, .add-form-box input { flex-grow: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; outline: none; }
+        .btn-save-item { background-color: var(--success-color); color: white; border: none; padding: 8px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; }
+
+        /* Lists & Items */
+        .list-container { display: flex; flex-direction: column; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+        .item-row:last-child { border-bottom: none; }
+        .item-meta h4 { font-size: 14px; font-weight: 600; color: #1f2937; }
+        .item-meta p { font-size: 12px; color: #6b7280; margin-top: 1px; }
+        
+        .btn-delete { background: none; border: none; color: var(--danger-color); cursor: pointer; font-size: 14px; padding: 5px; }
+        
+        /* Dropdown Select */
+        .status-select { padding: 6px 10px; border-radius: 8px; border: 1px solid #d1d5db; font-size: 12px; font-weight: 600; outline: none; cursor: pointer; }
+        .status-pending { color: #d97706; background-color: #fef3c7; border-color: #fcd34d; }
+        .status-ready { color: #16a34a; background-color: #dcfce7; border-color: #86efac; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container" id="loginBox">
+        <div class="login-header">
+            <i class="fa-solid fa-user-shield"></i>
+            <h2>Control Panel</h2>
+            <p>Enter credentials to access your shop backend</p>
+        </div>
+        
+        <form id="adminLoginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="password">Secret Password</label>
+                <input type="password" id="password" required placeholder="Enter password">
+            </div>
+            <button type="submit" class="btn-login">Secure Login</button>
+            <div class="error-msg" id="errorMessage">Invalid Username or Password!</div>
+        </form>
+    </div>
+        <div class="dashboard-container" id="dashboardBox">
+        
+        <div class="dash-header">
+            <div class="dash-title">
+                <h2>Smart Mobile Care</h2>
+                <p><i class="fa-solid fa-circle-user"></i> Welcome, Store Manager</p>
+            </div>
+            <div class="status-toggle">
+                <span id="statusLabel">SHOP OPEN</span>
+                <label class="switch">
+                    <input type="checkbox" id="shopStatusCheckbox" checked onchange="toggleShopStatus()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="dash-section">
+            <div class="section-hdr">
+                <h3><i class="fa-solid fa-boxes-stacked"></i> Live Stock Inventory</h3>
+                <button class="btn-add-toggle" onclick="toggleAddForm()"><i class="fa-solid fa-plus"></i> Add Item</button>
+            </div>
+            
+            <form id="addItemForm" class="add-form-box" onsubmit="addNewStockItem(event)">
+                <input type="text" id="newItemName" required placeholder="Item Name (e.g., boAt Airdopes 131)">
+                <div class="form-row">
+                    <input type="text" id="newItemCategory" required placeholder="Category (e.g., Earbuds)">
+                    <input type="text" id="newItemPrice" required placeholder="Price (e.g., ₹999)">
+                </div>
+                <button type="submit" class="btn-save-item">Save Product to Website</button>
+            </form>
+
+            <div class="list-container" id="stockListContainer">
+                <div class="item-row" id="stock-item-1">
+                    <div class="item-meta">
+                        <h4>boAt Rockerz 255 Pro+</h4>
+                        <p>Category: Neckband • <strong>₹999</strong></p>
+                    </div>
+                    <button class="btn-delete" onclick="deleteStockItem('stock-item-1')"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+                <div class="item-row" id="stock-item-2">
+                    <div class="item-meta">
+                        <h4>Realme Buds T110</h4>
+                        <p>Category: Earbuds • <strong>₹1,199</strong></p>
+                    </div>
+                    <button class="btn-delete" onclick="deleteStockItem('stock-item-2')"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dash-section">
+            <div class="section-hdr">
+                <h3><i class="fa-solid fa-screwdriver-wrench"></i> Repair Job Sheet</h3>
+            </div>
+            <div class="list-container">
+                <div class="item-row">
+                    <div class="item-meta">
+                        <h4>Token: SMC-105 (Rahul)</h4>
+                        <p>Device: Vivo V30 — Display Replacement</p>
+                    </div>
+                    <select class="status-select status-ready" onchange="updateRepairStatus(this)">
+                        <option value="pending">In Progress ⏳</option>
+                        <option value="ready" selected>Device Ready 🎉</option>
+                    </select>
+                </div>
+                <div class="item-row">
+                    <div class="item-meta">
+                        <h4>Token: SMC-106 (Amit)</h4>
+                        <p>Device: iPhone 13 — Charging Port Fix</p>
+                    </div>
+                    <select class="status-select status-pending" onchange="updateRepairStatus(this)">
+                        <option value="pending" selected>In Progress ⏳</option>
+                        <option value="ready">Device Ready 🎉</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+                <div class="dash-section" style="border-color: #fca5a5; background-color: #fffdfd;">
+            <div class="section-hdr">
+                <h3 style="color: #991b1b;"><i class="fa-solid fa-user-gear"></i> Super Admin Settings</h3>
+                <span style="font-size: 11px; background-color: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 50px; font-weight: 700;">MASTER ONLY</span>
+            </div>
+
+            <div style="background: #ffffff; padding: 14px; border-radius: 12px; border: 1px solid #fee2e2; margin-bottom: 15px;">
+                <h4 style="font-size: 13px; color: #1f2937; font-weight: 600; margin-bottom: 8px;"><i class="fa-solid fa-key"></i> Quick Token Generator</h4>
+                <div class="form-row">
+                    <input type="text" id="newTokenCustomer" placeholder="Customer Name">
+                    <button class="btn-add-toggle" style="background-color: #b91c1c;" onclick="generateSecretToken()">Generate</button>
+                </div>
+                <p id="tokenDisplayBox" style="font-size: 12px; font-weight: 700; color: #059669; margin-top: 8px; display: none;"></p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 5px;">
+                <div class="item-meta">
+                    <h4 style="font-size: 13px; color: #991b1b;">System Factory Reset</h4>
+                    <p style="font-size: 11px;">Clear temporary memory logs</p>
+                </div>
+                <button onclick="triggerSystemReset()" style="background-color: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;"><i class="fa-solid fa-trash-arrow-up"></i> Clear All</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Authentication ---
+        const ADMIN_USER = "shop101";
+        const ADMIN_PASS = "store789";
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('dashboardBox').style.display = 'flex';
+                document.body.style.alignItems = 'flex-start';
+                document.body.style.paddingTop = '30px';
+            } else {
+                errorDiv.style.display = 'block';
+                document.getElementById('password').value = ''; 
+            }
+        }
+
+        // --- Dashboard Toggles ---
+        function toggleShopStatus() {
+            const checkbox = document.getElementById('shopStatusCheckbox');
+            const label = document.getElementById('statusLabel');
+            if(checkbox.checked) {
+                label.innerText = "SHOP OPEN";
+                label.style.color = "#4ade80";
+            } else {
+                label.innerText = "SHOP CLOSED";
+                label.style.color = "#f87171";
+            }
+        }
+
+        // --- Stock Management ---
+        function toggleAddForm() {
+            const form = document.getElementById('addItemForm');
+            form.style.display = (form.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        let itemCounter = 3; 
+        function addNewStockItem(event) {
+            event.preventDefault();
+            const name = document.getElementById('newItemName').value.trim();
+            const category = document.getElementById('newItemCategory').value.trim();
+            const price = document.getElementById('newItemPrice').value.trim();
+            const container = document.getElementById('stockListContainer');
+            const uniqueId = `stock-item-${itemCounter}`;
+
+            const rowHtml = `
+                <div class="item-row" id="${uniqueId}">
+                    <div class="item-meta">
+                        <h4>${name}</h4>
+                        <p>Category: ${category} • <strong>${price}</strong></p>
+                    </div>
+                    <button class="btn-delete" onclick="deleteStockItem('${uniqueId}')"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', rowHtml);
+            itemCounter++;
+            document.getElementById('addItemForm').reset();
+            toggleAddForm();
+        }
+
+        function deleteStockItem(rowId) {
+            const rowElement = document.getElementById(rowId);
+            if(rowElement) { rowElement.remove(); }
+        }
+
+        // --- Repair Management ---
+        function updateRepairStatus(selectElement) {
+            if(selectElement.value === 'ready') {
+                selectElement.className = "status-select status-ready";
+            } else {
+                selectElement.className = "status-select status-pending";
+            }
+        }
+
+        // --- Super Admin Tools ---
+        function generateSecretToken() {
+            const clientName = document.getElementById('newTokenCustomer').value.trim();
+            if(!clientName) {
+                alert("Please enter a Customer Name first!");
+                return;
+            }
+            const randomNumber = Math.floor(100 + Math.random() * 900);
+            const generatedToken = `SMC-${randomNumber}`;
+            const displayBox = document.getElementById('tokenDisplayBox');
+            
+            displayBox.innerText = `SUCCESS: Created Token ${generatedToken} for ${clientName}`;
+            displayBox.style.display = 'block';
+            document.getElementById('newTokenCustomer').value = '';
+        }
+
+        function triggerSystemReset() {
+            const masterConfirm = confirm("CRITICAL WARNING:\n\nAre you sure you want to clear all dynamic logs and reset the dashboard inventory system?");
+            if(masterConfirm) {
+                alert("System Reset Complete! Default configurations restored successfully.");
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
