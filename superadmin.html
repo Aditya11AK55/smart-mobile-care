@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Panel - SMC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 450px; }
+        
+        /* Master Login Form */
+        .login-box { background: #1e293b; padding: 30px; border-radius: 15px; border: 1px solid #dc2626; text-align: center; margin-top: 50px; box-shadow: 0 0 20px rgba(220, 38, 38, 0.2); }
+        .login-box h2 { color: #f8fafc; margin-bottom: 5px; }
+        .login-box p { color: #94a3b8; font-size: 12px; margin-bottom: 20px; }
+        .input-field { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #475569; background: #0f172a; color: white; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; }
+        .input-field:focus { border-color: #dc2626; }
+        .btn-danger { width: 100%; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .error-msg { color: #fca5a5; font-size: 13px; margin-top: 10px; display: none; }
+
+        /* Master Dashboard */
+        .master-dashboard { display: none; margin-top: 20px; }
+        .header-title { text-align: center; color: #dc2626; margin-bottom: 30px; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
+        .master-card { background: #1e293b; padding: 20px; border-radius: 12px; border-left: 4px solid #dc2626; margin-bottom: 20px; }
+        .master-card h3 { margin-top: 0; color: #f8fafc; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        
+        .flex-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-action { background: #2563eb; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap; }
+        
+        .result-box { margin-top: 15px; padding: 12px; background: #064e3b; color: #34d399; border-radius: 8px; font-size: 14px; font-weight: bold; display: none; border: 1px solid #059669; }
+    </style>
+</head>
+<body>
+
+    <div class="container login-box" id="masterLoginScreen">
+        <h2><i class="fa-solid fa-user-secret"></i> MASTER LOGIN</h2>
+        <p>Restricted Area. Authorized Access Only.</p>
+        <input type="text" id="devUser" class="input-field" placeholder="Developer ID">
+        <input type="password" id="devPass" class="input-field" placeholder="Master Password">
+        <button class="btn-danger" onclick="checkMasterLogin()">Authenticate</button>
+        <p class="error-msg" id="masterError">Access Denied! Invalid Credentials.</p>
+    </div>
+
+    <div class="container master-dashboard" id="masterDashboardScreen">
+        <h1 class="header-title"><i class="fa-solid fa-shield-halved"></i> Super Admin</h1>
+
+        <div class="master-card">
+            <h3><i class="fa-solid fa-key"></i> Quick Token Generator</h3>
+            <p style="font-size: 12px; color: #94a3b8;">Generate unique SMC tracking tokens for VIP customers.</p>
+            <div class="flex-row">
+                <input type="text" id="customerName" class="input-field" style="margin-bottom: 0;" placeholder="Enter Customer Name">
+                <button class="btn-action" onclick="generateSMC()">Generate</button>
+            </div>
+            <div id="tokenResult" class="result-box"></div>
+        </div>
+
+        <div class="master-card" style="border-left-color: #ef4444;">
+            <h3><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> System Factory Reset</h3>
+            <p style="font-size: 12px; color: #94a3b8;">Warning: This will clear all temporary cache and refresh the dashboard data.</p>
+            <button class="btn-danger" style="margin-top: 15px;" onclick="factoryReset()"><i class="fa-solid fa-trash-can"></i> WIPE SYSTEM LOGS</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- MASTER LOGIN LOGIC ---
+        function checkMasterLogin() {
+            const user = document.getElementById('devUser').value;
+            const pass = document.getElementById('devPass').value;
+            const error = document.getElementById('masterError');
+
+            // Developer Credentials
+            if(user === 'dev_admin' && pass === 'master_secret_99') {
+                document.getElementById('masterLoginScreen').style.display = 'none';
+                document.getElementById('masterDashboardScreen').style.display = 'block';
+                error.style.display = 'none';
+            } else {
+                error.style.display = 'block';
+                document.getElementById('devPass').value = ''; // clear password field
+            }
+        }
+
+        // --- TOKEN GENERATOR ---
+        function generateSMC() {
+            const name = document.getElementById('customerName').value.trim();
+            const resultBox = document.getElementById('tokenResult');
+            
+            if(name === '') {
+                alert("Please enter a customer name first.");
+                return;
+            }
+
+            const randomNum = Math.floor(1000 + Math.random() * 9000); // Generates 4 digit number
+            const token = `SMC-${randomNum}`;
+            
+            resultBox.innerHTML = `<i class="fa-solid fa-check-circle"></i> Success! Token for ${name} is: <b>${token}</b>`;
+            resultBox.style.display = 'block';
+            document.getElementById('customerName').value = '';
+        }
+
+        // --- FACTORY RESET ---
+        function factoryReset() {
+            const confirmWipe = confirm("CRITICAL ALERT!\n\nAre you sure you want to wipe system logs? This action cannot be undone.");
+            if(confirmWipe) {
+                alert("System Reset Complete! All configurations restored to default.");
+                window.location.reload(); // Refreshes the page to simulate reset
+            }
+        }
+    </script>
+</body>
+</html>
