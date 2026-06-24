@@ -10,47 +10,54 @@
             --bg-dark: #0f172a;
             --card-bg: #1e293b;
             --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-            --accent-color: #3b82f6;
             --success-green: #10b981;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --input-bg: #0b1120;
+            --border-color: #334155;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); padding: 20px 15px; min-height: 100vh; }
         .container { width: 100%; max-width: 480px; margin: 0 auto; }
         
-        /* Premium Header Styling */
-        .header { text-align: center; margin-bottom: 25px; background: var(--card-bg); padding: 22px; border-radius: 24px; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .header h1 { font-size: 26px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; letter-spacing: 0.5px; }
+        /* Header */
+        .header { text-align: center; margin-bottom: 25px; background: var(--card-bg); padding: 22px; border-radius: 24px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .header h1 { font-size: 26px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
         .status-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: var(--success-green); padding: 6px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.3); }
         
-        /* Animated/Gradient Offer Banner */
-        .offer-banner { background: var(--primary-gradient); padding: 20px; border-radius: 24px; margin-bottom: 25px; box-shadow: 0 12px 24px rgba(168, 85, 247, 0.25); position: relative; overflow: hidden; }
+        /* Offer Banner */
+        .offer-banner { background: var(--primary-gradient); padding: 20px; border-radius: 24px; margin-bottom: 25px; position: relative; overflow: hidden; }
         .offer-banner h2 { font-size: 19px; font-weight: 700; margin-bottom: 4px; color: #ffffff; }
-        .offer-banner p { font-size: 13px; opacity: 0.95; color: #f3e8ff; }
-        .offer-tag { position: absolute; top: 12px; right: 12px; background: white; color: #a855f7; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 50px; text-transform: uppercase; }
-
-        /* Section Header Layout */
-        .section-title { font-size: 15px; font-weight: 700; margin-bottom: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
-        .section-title i { color: #6366f1; font-size: 16px; }
-
-        /* Grid Framework */
-        .grid { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        .offer-banner p { font-size: 13px; color: #f3e8ff; }
         
-        /* Premium Glassmorphism Card Style */
-        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; border: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; gap: 15px; transition: transform 0.2s, border-color 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .card:active { transform: scale(0.98); }
-        .card-info { display: flex; align-items: center; gap: 14px; }
-        .card-icon { width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.2); }
+        .section-title { font-size: 15px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .section-title i { color: #6366f1; }
+
+        /* Card with Form Styles */
+        .grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 25px; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        .card-top { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 15px; }
+        .card-info { display: flex; align-items: center; gap: 14px; width: 100%; }
+        .card-icon { width: 48px; height: 48px; min-width: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.2); }
         .card-text h3 { font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 3px; }
-        .card-text p { font-size: 12px; color: var(--text-muted); line-height: 1.3; }
-        .card-price { font-size: 13px; font-weight: 700; color: var(--success-green); margin-top: 4px; background: rgba(16, 185, 129, 0.1); display: inline-block; padding: 2px 8px; border-radius: 6px; }
+        .card-text p { font-size: 12px; color: var(--text-muted); }
         
-        /* Quick Premium WhatsApp Button */
-        .btn-action { background: #22c55e; color: white; border: none; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2); }
-        .btn-action:active { transform: scale(0.95); }
+        /* The Missing Form Fields */
+        .form-box { background: var(--input-bg); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 12px; }
+        .input-group { margin-bottom: 10px; }
+        .input-group:last-child { margin-bottom: 0; }
+        .input-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; font-weight: 600; }
+        
+        .premium-input { width: 100%; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); font-size: 13px; outline: none; transition: border 0.3s; }
+        .premium-input:focus { border-color: #6366f1; }
+        
+        select.premium-input { cursor: pointer; appearance: none; }
+        select option { background: var(--bg-dark); }
 
-        /* Footer System */
+        .btn-action { width: 100%; background: #22c55e; color: white; border: none; padding: 12px 16px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s; }
+        .btn-action:active { transform: scale(0.97); }
+
         .footer { text-align: center; margin-top: 40px; font-size: 11px; color: var(--text-muted); padding-top: 20px; border-top: 1px solid #1e293b; }
     </style>
 </head>
@@ -63,84 +70,126 @@
         </div>
 
         <div class="offer-banner">
-            <span class="offer-tag">Live Deal</span>
             <h2>Today's Special Offer!</h2>
             <p>Get a Premium Tempered Glass absolutely free with every Display Replacement!</p>
         </div>
 
-        <div class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Professional Services</div>
+        <div class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Professional Repair</div>
         <div class="grid">
+            
             <div class="card">
-                <div class="card-info">
-                    <div class="card-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
-                    <div class="card-text">
-                        <h3>Display Replacement</h3>
-                        <p>Original Quality Setup & Warranty</p>
+                <div class="card-top">
+                    <div class="card-info">
+                        <div class="card-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                        <div class="card-text">
+                            <h3>Display Replacement</h3>
+                            <p>Original Quality Setup & Warranty</p>
+                        </div>
                     </div>
                 </div>
-                <button class="btn-action" onclick="orderViaWhatsApp('Display Replacement')"><i class="fa-brands fa-whatsapp"></i> Book</button>
+                <div class="form-box">
+                    <div class="input-group">
+                        <label>Select Company/Brand</label>
+                        <select id="brand-display" class="premium-input">
+                            <option value="">-- Choose Brand --</option>
+                            <option value="Samsung">Samsung</option>
+                            <option value="Vivo">Vivo</option>
+                            <option value="Oppo">Oppo</option>
+                            <option value="Realme">Realme</option>
+                            <option value="Xiaomi/Redmi">Xiaomi/Redmi</option>
+                            <option value="Infinix">Infinix</option>
+                            <option value="Apple/iPhone">Apple / iPhone</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Mobile Model Name</label>
+                        <input type="text" id="model-display" class="premium-input" placeholder="e.g., Hot 30 5G">
+                    </div>
+                    <div class="input-group">
+                        <label>Your WhatsApp Number</label>
+                        <input type="number" id="phone-display" class="premium-input" placeholder="Enter your 10 digit number">
+                    </div>
+                </div>
+                <button class="btn-action" onclick="submitOrder('Display Replacement', 'brand-display', 'model-display', 'phone-display')"><i class="fa-brands fa-whatsapp"></i> Book Display Repair</button>
             </div>
 
             <div class="card">
-                <div class="card-info">
-                    <div class="card-icon"><i class="fa-solid fa-battery-full"></i></div>
-                    <div class="card-text">
-                        <h3>Battery Replacement</h3>
-                        <p>High Capacity Original Backup Log</p>
+                <div class="card-top">
+                    <div class="card-info">
+                        <div class="card-icon"><i class="fa-solid fa-battery-full"></i></div>
+                        <div class="card-text">
+                            <h3>Battery Replacement</h3>
+                            <p>High Capacity Original Backup</p>
+                        </div>
                     </div>
                 </div>
-                <button class="btn-action" onclick="orderViaWhatsApp('Battery Replacement')"><i class="fa-brands fa-whatsapp"></i> Book</button>
+                <div class="form-box">
+                    <div class="input-group">
+                        <label>Select Company/Brand</label>
+                        <select id="brand-battery" class="premium-input">
+                            <option value="">-- Choose Brand --</option>
+                            <option value="Samsung">Samsung</option>
+                            <option value="Vivo">Vivo</option>
+                            <option value="Oppo">Oppo</option>
+                            <option value="Realme">Realme</option>
+                            <option value="Xiaomi/Redmi">Xiaomi/Redmi</option>
+                            <option value="Infinix">Infinix</option>
+                            <option value="Apple/iPhone">Apple / iPhone</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Mobile Model Name</label>
+                        <input type="text" id="model-battery" class="premium-input" placeholder="e.g., Galaxy M32">
+                    </div>
+                    <div class="input-group">
+                        <label>Your WhatsApp Number</label>
+                        <input type="number" id="phone-battery" class="premium-input" placeholder="Enter your 10 digit number">
+                    </div>
+                </div>
+                <button class="btn-action" onclick="submitOrder('Battery Replacement', 'brand-battery', 'model-battery', 'phone-battery')"><i class="fa-brands fa-whatsapp"></i> Book Battery Repair</button>
             </div>
 
-            <div class="card">
-                <div class="card-info">
-                    <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
-                    <div class="card-text">
-                        <h3>Charging Port Fix</h3>
-                        <p>Fast Charging Issues Resolved</p>
-                    </div>
-                </div>
-                <button class="btn-action" onclick="orderViaWhatsApp('Charging Port Repair')"><i class="fa-brands fa-whatsapp"></i> Book</button>
-            </div>
         </div>
 
-        <div class="section-title"><i class="fa-solid fa-charging-station"></i> Premium Accessories</div>
+        <div class="section-title"><i class="fa-solid fa-headphones"></i> Premium Accessories</div>
         <div class="grid">
+            
             <div class="card">
-                <div class="card-info">
-                    <div class="card-icon"><i class="fa-solid fa-headphones"></i></div>
-                    <div class="card-text">
-                        <h3>Branded Earbuds / Neckband</h3>
-                        <p>High-End Heavy Bass Gadgets</p>
-                        <div class="card-price">Starting ₹999</div>
+                <div class="card-top">
+                    <div class="card-info">
+                        <div class="card-icon"><i class="fa-solid fa-ear-listen"></i></div>
+                        <div class="card-text">
+                            <h3>Earbuds & Neckbands</h3>
+                            <p>High Bass & Long Battery</p>
+                        </div>
                     </div>
                 </div>
-                <button class="btn-action" onclick="orderViaWhatsApp('Premium Earbuds/Neckband Accessories')"><i class="fa-brands fa-whatsapp"></i> Buy</button>
+                <div class="form-box">
+                    <div class="input-group">
+                        <label>Select Accessory Brand</label>
+                        <select id="brand-acc" class="premium-input">
+                            <option value="">-- Choose Brand --</option>
+                            <option value="boAt">boAt</option>
+                            <option value="Noise">Noise</option>
+                            <option value="Realme">Realme</option>
+                            <option value="OnePlus">OnePlus</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Item Name/Type</label>
+                        <input type="text" id="model-acc" class="premium-input" placeholder="e.g., Airdopes 141">
+                    </div>
+                    <div class="input-group">
+                        <label>Your WhatsApp Number</label>
+                        <input type="number" id="phone-acc" class="premium-input" placeholder="Enter your 10 digit number">
+                    </div>
+                </div>
+                <button class="btn-action" onclick="submitOrder('Accessory Order', 'brand-acc', 'model-acc', 'phone-acc')"><i class="fa-brands fa-whatsapp"></i> Order Accessory</button>
             </div>
 
-            <div class="card">
-                <div class="card-info">
-                    <div class="card-icon"><i class="fa-solid fa-plug-circle-bolt"></i></div>
-                    <div class="card-text">
-                        <h3>Fast Chargers & Cables</h3>
-                        <p>High Speed Power Adapters</p>
-                        <div class="card-price">Starting ₹299</div>
-                    </div>
-                </div>
-                <button class="btn-action" onclick="orderViaWhatsApp('Fast Chargers & Data Cables')"><i class="fa-brands fa-whatsapp"></i> Buy</button>
-            </div>
-
-            <div class="card">
-                <div class="card-info">
-                    <div class="card-icon"><i class="fa-solid fa-mobile-rear"></i></div>
-                    <div class="card-text">
-                        <h3>Premium Mobile Covers</h3>
-                        <p>Military Grade Drop Protection</p>
-                        <div class="card-price">Starting ₹149</div>
-                    </div>
-                </div>
-                <button class="btn-action" onclick="orderViaWhatsApp('Premium Mobile Covers')"><i class="fa-brands fa-whatsapp"></i> Buy</button>
-            </div>
         </div>
 
         <div class="footer">
@@ -149,11 +198,33 @@
     </div>
 
     <script>
-        function orderViaWhatsApp(itemName) {
-            // यहाँ 91XXXXXXXXXX को हटाकर अपना असली नंबर कंट्री कोड के साथ डाल लें
-            const myPhoneNumber = "+91 9678491155"; 
-            const messageText = encodeURIComponent(`Hello Smart Mobile Care, I want to query/book about: ${itemName}. Please provide more details.`);
-            const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${messageText}`;
+        function submitOrder(serviceName, brandId, modelId, phoneId) {
+            // Get values from the specific card's form
+            const brand = document.getElementById(brandId).value;
+            const model = document.getElementById(modelId).value.trim();
+            const phone = document.getElementById(phoneId).value.trim();
+
+            // Validation: Check if user filled the form
+            if (brand === "" || model === "" || phone === "") {
+                alert("Please fill all details (Brand, Model, and your Phone Number) before booking!");
+                return;
+            }
+
+            // Validation: Check if phone number is somewhat valid
+            if (phone.length < 10) {
+                alert("Please enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            // === SHOP OWNER WHATSAPP NUMBER ===
+            // यहाँ 91 के बाद अपना असली दुकान का नंबर डालें
+            const myShopNumber = "91XXXXXXXXXX"; 
+
+            // Create professional WhatsApp Message Format
+            const textMessage = `*New Order: ${serviceName}*\n\n*Company/Brand:* ${brand}\n*Model Name:* ${model}\n*Customer Contact:* ${phone}\n\nHello SMC, I want to book this service. Please confirm!`;
+
+            // Redirect to WhatsApp
+            const whatsappUrl = `https://wa.me/${myShopNumber}?text=${encodeURIComponent(textMessage)}`;
             window.open(whatsappUrl, '_blank');
         }
     </script>
