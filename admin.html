@@ -3,72 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopkeeper Dashboard</title>
+    <title>SMC | Staff Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f3f4f6; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 450px; }
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --primary-color: #4f46e5;
+            --accent-color: #3b82f6;
+            --success-green: #10b981;
+            --danger-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 20px 15px; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 500px; }
         
-        /* Login Form Styles */
-        .login-box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; margin-top: 50px; }
-        .login-box h2 { margin-bottom: 20px; color: #1f2937; }
-        .input-field { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        .btn-primary { width: 100%; background: #4f46e5; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .error-msg { color: #ef4444; font-size: 13px; margin-top: 10px; display: none; }
+        /* Premium Login Screen */
+        .login-box { background: var(--card-bg); padding: 35px 25px; border-radius: 24px; border: 1px solid var(--border-color); box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: center; margin-top: 10vh; }
+        .login-box i.fa-store { font-size: 40px; color: var(--primary-color); margin-bottom: 15px; }
+        .login-box h2 { margin-bottom: 25px; font-size: 22px; color: var(--text-main); font-weight: 700; letter-spacing: 0.5px; }
+        
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 14px; color: var(--text-muted); }
+        .input-field { width: 100%; padding: 12px 15px 12px 45px; background: #0b1120; border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 14px; outline: none; transition: border 0.3s; }
+        .input-field:focus { border-color: var(--primary-color); }
+        
+        .btn-primary { width: 100%; background: linear-gradient(135deg, #4f46e5, #3b82f6); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3); }
+        .btn-primary:active { transform: scale(0.98); }
+        .error-msg { color: #fca5a5; font-size: 13px; margin-top: 15px; display: none; font-weight: 600; background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px; }
 
         /* Dashboard Styles */
-        .dashboard-box { display: none; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 15px; }
-        .card-header h3 { margin: 0; font-size: 16px; color: #1f2937; }
+        .dashboard-box { display: none; margin-top: 10px; }
+        .header-title { text-align: center; margin-bottom: 25px; font-size: 20px; font-weight: 800; color: var(--text-main); }
         
-        /* Status Toggle */
-        .status-btn { background: #22c55e; color: white; border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .status-btn.closed { background: #ef4444; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.15); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px; }
+        .card-header h3 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .card-header h3 i { color: var(--primary-color); }
 
-        /* Lists */
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
-        .item-row:last-child { border-bottom: none; }
-        .btn-delete { background: #fee2e2; color: #ef4444; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        
-        /* Add Form */
+        /* Custom Toggle Switch (Open/Close) */
+        .status-btn { background: var(--success-green); color: white; border: none; padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.3s; display: flex; align-items: center; gap: 6px; }
+        .status-btn.closed { background: var(--danger-red); }
+
+        /* Inventory List */
         .add-flex { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-add { background: #22c55e; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-add { background: var(--primary-color); color: white; border: none; padding: 0 18px; border-radius: 10px; cursor: pointer; font-weight: 700; transition: background 0.2s; }
+        .btn-add:hover { background: #4338ca; }
         
-        select { padding: 5px; border-radius: 5px; border: 1px solid #ccc; font-size: 13px; outline: none; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(15, 23, 42, 0.6); border-radius: 10px; margin-bottom: 8px; border: 1px solid transparent; transition: border 0.2s; }
+        .item-row:hover { border-color: var(--border-color); }
+        .item-name { font-size: 14px; font-weight: 600; }
+        .btn-delete { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        
+        /* Select Dropdown */
+        select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-color); background: #0b1120; color: var(--text-main); font-size: 13px; font-weight: 600; outline: none; cursor: pointer; }
+        select option { background: var(--bg-dark); }
     </style>
 </head>
 <body>
 
     <div class="container login-box" id="loginScreen">
-        <h2><i class="fa-solid fa-store"></i> Staff Login</h2>
-        <input type="text" id="username" class="input-field" placeholder="Username (shop101)">
-        <input type="password" id="password" class="input-field" placeholder="Password (store789)">
-        <button class="btn-primary" onclick="checkLogin()">Login to Dashboard</button>
-        <p class="error-msg" id="errorMsg">Incorrect Username or Password!</p>
+        <i class="fa-solid fa-store"></i>
+        <h2>Staff Portal Login</h2>
+        
+        <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="username" class="input-field" placeholder="Username">
+        </div>
+        
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" class="input-field" placeholder="Password">
+        </div>
+        
+        <button class="btn-primary" onclick="checkLogin()">Access Dashboard <i class="fa-solid fa-arrow-right-to-bracket" style="margin-left:5px;"></i></button>
+        <p class="error-msg" id="errorMsg"><i class="fa-solid fa-circle-exclamation"></i> Invalid Username or Password!</p>
     </div>
 
     <div class="container dashboard-box" id="dashboardScreen">
+        <h1 class="header-title">Smart Mobile Care</h1>
         
         <div class="card">
             <div class="card-header">
-                <h3>Shop Status</h3>
-                <button id="shopStatusBtn" class="status-btn" onclick="toggleShop()">OPEN</button>
+                <h3><i class="fa-solid fa-store"></i> Current Shop Status</h3>
+                <button id="shopStatusBtn" class="status-btn" onclick="toggleShop()"><i class="fa-solid fa-door-open"></i> OPEN</button>
             </div>
-            <p style="font-size: 12px; color: #6b7280; margin: 0;">Change shop status to let customers know if you are open or closed.</p>
+            <p style="font-size: 12px; color: var(--text-muted); margin: 0;">Toggle this button to update whether the shop is currently open or closed for customers.</p>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <h3>Live Stock Inventory</h3>
+                <h3><i class="fa-solid fa-boxes-stacked"></i> Live Stock Inventory</h3>
             </div>
             <div class="add-flex">
-                <input type="text" id="newItemInput" class="input-field" style="margin-bottom: 0;" placeholder="Item Name (e.g., Charger)">
-                <button class="btn-add" onclick="addStock()">Add</button>
+                <input type="text" id="newItemInput" class="input-field" style="padding: 10px 15px;" placeholder="Add new item (e.g., iPhone Charger)">
+                <button class="btn-add" onclick="addStock()"><i class="fa-solid fa-plus"></i></button>
             </div>
             <div id="stockList">
                 <div class="item-row">
-                    <span>boAt Earbuds</span>
+                    <span class="item-name"><i class="fa-solid fa-caret-right" style="color:var(--text-muted); margin-right:5px;"></i> Original Display (Android)</span>
                     <button class="btn-delete" onclick="this.parentElement.remove()">Remove</button>
                 </div>
             </div>
@@ -76,14 +112,21 @@
 
         <div class="card">
             <div class="card-header">
-                <h3>Repair Job Sheet</h3>
+                <h3><i class="fa-solid fa-screwdriver-wrench"></i> Active Repair Jobs</h3>
             </div>
             <div id="repairList">
                 <div class="item-row">
-                    <span>Token: SMC-101 (Screen Fix)</span>
-                    <select onchange="this.style.color = this.value === 'Ready' ? 'green' : 'orange'">
-                        <option value="In Progress" style="color: orange;">In Progress ⏳</option>
-                        <option value="Ready" style="color: green;">Device Ready 🎉</option>
+                    <span class="item-name">Token: SMC-2041</span>
+                    <select onchange="updateColor(this)">
+                        <option value="pending" style="color: #fbbf24;">⏳ In Progress</option>
+                        <option value="ready" style="color: #34d399;">✅ Ready</option>
+                    </select>
+                </div>
+                <div class="item-row">
+                    <span class="item-name">Token: SMC-8992</span>
+                    <select onchange="updateColor(this)">
+                        <option value="pending" style="color: #fbbf24;">⏳ In Progress</option>
+                        <option value="ready" style="color: #34d399;">✅ Ready</option>
                     </select>
                 </div>
             </div>
@@ -92,45 +135,69 @@
     </div>
 
     <script>
-        // LOGIN LOGIC
+        // 1. SECURE LOGIN LOGIC
         function checkLogin() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
             const error = document.getElementById('errorMsg');
 
+            // Credentials for Staff
             if(user === 'shop101' && pass === 'store789') {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'block';
                 error.style.display = 'none';
             } else {
                 error.style.display = 'block';
+                // Add a little shake animation for incorrect password
+                const loginBox = document.querySelector('.login-box');
+                loginBox.style.transform = 'translateX(-10px)';
+                setTimeout(() => loginBox.style.transform = 'translateX(10px)', 100);
+                setTimeout(() => loginBox.style.transform = 'translateX(0)', 200);
             }
         }
 
-        // SHOP STATUS TOGGLE
+        // 2. SHOP STATUS TOGGLE
         function toggleShop() {
             const btn = document.getElementById('shopStatusBtn');
-            if(btn.innerText === 'OPEN') {
-                btn.innerText = 'CLOSED';
+            if(btn.innerText.includes('OPEN')) {
+                btn.innerHTML = '<i class="fa-solid fa-door-closed"></i> CLOSED';
                 btn.classList.add('closed');
             } else {
-                btn.innerText = 'OPEN';
+                btn.innerHTML = '<i class="fa-solid fa-door-open"></i> OPEN';
                 btn.classList.remove('closed');
             }
         }
 
-        // ADD INVENTORY
+        // 3. ADD INVENTORY SYSTEM
         function addStock() {
             const input = document.getElementById('newItemInput');
             const list = document.getElementById('stockList');
+            
             if(input.value.trim() !== '') {
                 const newRow = document.createElement('div');
                 newRow.className = 'item-row';
-                newRow.innerHTML = `<span>${input.value}</span> <button class="btn-delete" onclick="this.parentElement.remove()">Remove</button>`;
+                newRow.innerHTML = `
+                    <span class="item-name"><i class="fa-solid fa-caret-right" style="color:var(--text-muted); margin-right:5px;"></i> ${input.value}</span> 
+                    <button class="btn-delete" onclick="this.parentElement.remove()">Remove</button>
+                `;
                 list.appendChild(newRow);
-                input.value = ''; // clear input
+                input.value = ''; // clear input after adding
             }
         }
+
+        // 4. COLOR UPDATE FOR DROPDOWN
+        function updateColor(selectElement) {
+            if(selectElement.value === 'ready') {
+                selectElement.style.color = '#34d399'; // Green text
+                selectElement.style.borderColor = '#059669'; // Green border
+            } else {
+                selectElement.style.color = '#fbbf24'; // Yellow text
+                selectElement.style.borderColor = '#334155'; // Normal border
+            }
+        }
+        
+        // Initialize default select colors
+        document.querySelectorAll('select').forEach(updateColor);
     </script>
 </body>
 </html>
