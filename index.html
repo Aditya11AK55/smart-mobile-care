@@ -3,302 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Mobile Care</title>
+    <title>Smart Mobile Care | Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #4f46e5; /* Premium Indigo */
-            --success-color: #22c55e; /* WhatsApp Green */
-            --text-color: #1f2937;
-            --bg-color: #f3f4f6;
-            --card-bg: #ffffff;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 30px; }
-        
-        /* Header & Live Status Style */
-        .header { background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; padding: 25px 15px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .header h1 { font-size: 24px; margin-bottom: 5px; font-weight: 700; letter-spacing: 0.5px; }
-        .header p { font-size: 13px; opacity: 0.8; margin-bottom: 12px; }
-        .status-badge { display: inline-flex; align-items: center; gap: 6px; margin: 0 auto; padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; }
-        .status-open { background-color: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background-color: currentColor; }
-
-        /* Marquee Offer Ticker */
-        .ticker-wrap { background-color: #fef08a; color: #854d0e; padding: 8px 0; overflow: hidden; font-size: 13px; font-weight: 600; }
-        .ticker { display: inline-block; white-space: nowrap; animation: marquee 20s linear infinite; padding-left: 100%; }
-        @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-
-        /* Layout Container */
-        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        .section-title { font-size: 14px; font-weight: 700; margin: 22px 0 10px 0; color: #4b5563; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
-
-        /* Core Services 2x2 Grid */
-        .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .card { background-color: var(--card-bg); padding: 22px 15px; border-radius: 16px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.01); border: 1px solid #e5e7eb; cursor: pointer; transition: transform 0.1s, border-color 0.2s; }
-        .card:active { transform: scale(0.96); }
-        .card i { font-size: 28px; color: var(--primary-color); margin-bottom: 10px; }
-        .card h3 { font-size: 13px; color: #1f2937; font-weight: 600; }
-
-        /* Premium Accessories List */
-        .accessories-list { display: flex; flex-direction: column; gap: 10px; }
-        .acc-item { background-color: var(--card-bg); padding: 14px; border-radius: 14px; display: flex; align-items: center; gap: 15px; border: 1px solid #e5e7eb; cursor: pointer; }
-        .acc-icon { background-color: #e0e7ff; color: var(--primary-color); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .acc-details { flex-grow: 1; }
-        .acc-details h4 { font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 2px; }
-        .acc-details p { font-size: 12px; color: #6b7280; }
-
-        /* Utilities Styles */
-        .btn-map { background-color: #ffffff; color: #374151; border: 1px solid #d1d5db; width: 100%; padding: 14px; border-radius: 14px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; margin-top: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .track-box { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 18px; margin-top: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .track-input-group { display: flex; gap: 8px; margin-top: 12px; }
-        .track-input { flex-grow: 1; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 14px; outline: none; transition: border-color 0.2s; }
-        .track-input:focus { border-color: var(--primary-color); }
-        .btn-track { background-color: var(--primary-color); color: white; border: none; padding: 0 20px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; }
+        body { font-family: 'Segoe UI', sans-serif; background: #111827; color: white; margin: 0; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .status-badge { background: #065f46; padding: 5px 15px; border-radius: 20px; font-size: 12px; }
+        .card-container { display: grid; gap: 15px; }
+        .card { background: #1f2937; padding: 20px; border-radius: 15px; border: 1px solid #374151; }
+        .btn-order { background: #4f46e5; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
-
     <div class="header">
         <h1>Smart Mobile Care</h1>
-        <p>Premium Covers, Glass, Repairs & Accessories</p>
-        <div class="status-badge status-open">
-            <span class="status-dot"></span> Open Now (9:00 AM - 8:30 PM)
-        </div>
+        <span class="status-badge"><i class="fa-solid fa-circle-check"></i> SHOP OPEN</span>
     </div>
 
-    <div class="ticker-wrap">
-        <div class="ticker">🔥 TODAY'S MEGA OFFER: Flat ₹300 OFF on Realme Buds T110! Check premium accessories section below.</div>
-    </div>
-
-    <div class="container">
-        <div class="section-title"><i class="fa-solid fa-gears"></i> Our Core Services</div>
-        <div class="grid-2x2">
-            <div class="card" onclick="selectCategory('Mobile Covers')">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-                <h3>Mobile Covers</h3>
-            </div>
-            <div class="card" onclick="selectCategory('Tempered Glass')">
-                <i class="fa-solid fa-shield-halved"></i>
-                <h3>Tempered Glass</h3>
-            </div>
-            <div class="card" onclick="selectCategory('Display Repair')">
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                <h3>Display & Repair</h3>
-            </div>
-            <div class="card" onclick="selectCategory('Software Unlocking')">
-                <i class="fa-solid fa-unlock-keyhole"></i>
-                <h3>Software Unlocking</h3>
-            </div>
+    <div class="card-container">
+        <div class="card">
+            <h3><i class="fa-solid fa-mobile-screen"></i> Display Repair</h3>
+            <p>Original quality display replacement.</p>
+            <button class="btn-order" onclick="sendWhatsApp('Display Repair')">Book Now</button>
         </div>
-
-        <div class="section-title"><i class="fa-solid fa-cart-shopping"></i> Premium Accessories</div>
-        <div class="accessories-list">
-            <div class="acc-item" onclick="selectCategory('Earbuds & Headphones')">
-                <div class="acc-icon"><i class="fa-solid fa-headphones"></i></div>
-                <div class="acc-details">
-                    <h4>Earphones & Buds</h4>
-                    <p>Wireless earbuds and neckbands at offer rates</p>
-                </div>
-            </div>
-            <div class="acc-item" onclick="selectCategory('Chargers & Cables')">
-                <div class="acc-icon"><i class="fa-solid fa-plug"></i></div>
-                <div class="acc-details">
-                    <h4>Chargers & Cables</h4>
-                    <p>Fast chargers and original high-speed cables</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-title"><i class="fa-solid fa-location-dot"></i> Location & Tracking</div>
-        <button class="btn-map" onclick="openGoogleMap()"><i class="fa-solid fa-map-location-dot"></i> Find Our Shop (Google Maps)</button>
-        
-        <div class="track-box">
-            <h4 style="font-size: 13px; color: #4b5563; font-weight: 600;"><i class="fa-solid fa-magnifying-glass"></i> Track Repair Status</h4>
-            <div class="track-input-group">
-                <input type="text" id="tokenInput" class="track-input" placeholder="Enter Token Number (e.g., SMC-101)">
-                <button class="btn-track" onclick="checkToken()">Check</button>
-            </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-headphones"></i> Bluetooth Earbuds</h3>
+            <p>Premium sound, low price.</p>
+            <button class="btn-order" onclick="sendWhatsApp('Bluetooth Earbuds')">Book Now</button>
         </div>
     </div>
 
     <script>
-        // JavaScript logic will be injected here in Part 2.
-        function selectCategory(name) { alert(name + " form pop-up will activate in Part 2!"); }
-        function openGoogleMap() { alert("Google Maps navigation will open in Part 2!"); }
-        function checkToken() { alert("Token tracking engine will connect in Part 2!"); }
+        function sendWhatsApp(service) {
+            const phoneNumber = "91XXXXXXXXXX"; // अपना नंबर यहाँ डालें
+            const url = `https://wa.me/${phoneNumber}?text=Hello, I want to book: ${service}`;
+            window.open(url, '_blank');
+        }
     </script>
 </body>
 </html>
-    <style>
-        /* Order Popup Modal Styling */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0; top: 0; 
-            width: 100%; height: 100%; 
-            background-color: rgba(0,0,0,0.5); 
-            align-items: center; 
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-content {
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-            position: relative;
-            animation: slideUp 0.3s ease-out;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .close-btn {
-            position: absolute;
-            right: 20px;
-            top: 18px;
-            font-size: 26px;
-            font-weight: bold;
-            color: #9ca3af;
-            cursor: pointer;
-        }
-        .close-btn:hover { color: #1f2937; }
-        .modal h2 { font-size: 18px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
-        .modal p { font-size: 13px; color: #6b7280; margin-bottom: 20px; }
-        
-        /* Modal Form Elements */
-        .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 11px; font-weight: 700; color: #4b5563; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input { padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 14px; outline: none; transition: border-color 0.2s; color: #1f2937; }
-        .form-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-        
-        .btn-submit-order {
-            background-color: var(--success-color);
-            color: white; border: none; width: 100%; padding: 14px; border-radius: 12px;
-            font-weight: 600; font-size: 15px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            margin-top: 10px; box-shadow: 0 4px 12px rgba(34,197,94,0.2); transition: background-color 0.2s;
-        }
-        .btn-submit-order:active { transform: scale(0.98); }
-        .btn-submit-order:hover { background-color: #16a34a; }
-    </style>
-
-    <div id="orderModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Place Order</h2>
-            <p id="modalSubtitle">Submit details to forward your order via WhatsApp</p>
-            
-            <form id="orderForm" onsubmit="sendWhatsAppOrder(event)">
-                <input type="hidden" id="selectedCategory">
-                
-                <div class="form-group" id="modelGroup">
-                    <label for="phoneModel">Your Phone Brand & Model</label>
-                    <input type="text" id="phoneModel" placeholder="e.g., iPhone 15 Pro, Vivo V30">
-                </div>
-
-                <div class="form-group">
-                    <label for="customerName">Your Name</label>
-                    <input type="text" id="customerName" required placeholder="Enter your full name">
-                </div>
-
-                <div class="form-group">
-                    <label for="customerLocation">Your Locality / Area</label>
-                    <input type="text" id="customerLocation" required placeholder="e.g., Milik Basti, Hojai">
-                </div>
-
-                <button type="submit" class="btn-submit-order">
-                    <i class="fa-brands fa-whatsapp"></i> Confirm Order via WhatsApp
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // TARGET WHATSAPP NUMBER: Change this to the real shop number later
-        const SHOP_WHATSAPP_NUMBER = "919876543210"; 
-
-        // Function 1: Opens popup and adapts form fields based on selection
-         Lahul function selectCategory(categoryName) {
-            document.getElementById('selectedCategory').value = categoryName;
-            document.getElementById('modalTitle').innerText = "Order: " + categoryName;
-            
-            const modelGroup = document.getElementById('modelGroup');
-            const phoneModelInput = document.getElementById('phoneModel');
-            
-            // Smart Form: Hide phone model line if ordering generic accessories
-            if (categoryName.includes('Covers') || categoryName.includes('Glass') || categoryName.includes('Repair')) {
-                modelGroup.style.display = 'flex';
-                phoneModelInput.required = true;
-            } else {
-                modelGroup.style.display = 'none';
-                phoneModelInput.required = false;
-            }
-            
-            document.getElementById('orderModal').style.display = 'flex';
-        }
-
-        // Function 2: Closes popup and clears inputs
-        function closeModal() {
-            document.getElementById('orderModal').style.display = 'none';
-            document.getElementById('orderForm').reset();
-        }
-
-        // Close modal automatically if customer clicks outside the white box
-        window.onclick = function(event) {
-            const modal = document.getElementById('orderModal');
-            if (event.target == modal) { closeModal(); }
-        }
-
-        // Function 3: Generates clean dynamic text & opens WhatsApp link
-        function sendWhatsAppOrder(event) {
-            event.preventDefault();
-            
-            const category = document.getElementById('selectedCategory').value;
-            const name = document.getElementById('customerName').value;
-            const location = document.getElementById('customerLocation').value;
-            const phoneModel = document.getElementById('phoneModel').value || "Not Applicable";
-            
-            // Formatting the clean professional WhatsApp slip
-            let whatsappText = `📱 *NEW ORDER - Smart Mobile Care*\n\n`;
-            whatsappText += `📦 *Category:* ${category}\n`;
-            if (phoneModel !== "Not Applicable") {
-                whatsappText += `📲 *Phone Model:* ${phoneModel}\n`;
-            }
-            whatsappText += `👤 *Customer Name:* ${name}\n`;
-            whatsappText += `📍 *Customer Location:* ${location}\n\n`;
-            whatsappText += `Hello! I checked this service on your website. Is this currently available? Please confirm.`;
-            
-            const encodedText = encodeURIComponent(whatsappText);
-            const finalUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodedText}`;
-            
-            window.open(finalUrl, '_blank');
-            closeModal();
-        }
-
-        // Function 4: Maps routing
-        function openGoogleMap() {
-            const googleMapsUrl = "https://maps.google.com"; // Place real shop map pin link here
-            window.open(googleMapsUrl, '_blank');
-        }
-
-        // Function 5: Instant Token Status Checker Mock
-        function checkToken() {
-            const token = document.getElementById('tokenInput').value.trim().toUpperCase();
-            if(!token) {
-                alert("Please enter a valid Token Number!");
-                return;
-            }
-            
-            // Dummy logic: We will pull live status from database in later parts
-            if(token === "SMC-105") {
-                alert("Token SMC-105 Status: [DEVICE READY 🎉] Your display is fixed. Please collect it from the shop.");
-            } else {
-                alert("Token " + token + " Status: [WORK IN PROGRESS ⏳] Technician is repairing your device. Please check back later.");
-            }
-        }
-    </script>
