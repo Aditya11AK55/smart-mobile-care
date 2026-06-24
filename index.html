@@ -3,41 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Mobile Care | Home</title>
+    <title>Smart Mobile Care | Premium Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #111827; color: white; margin: 0; padding: 20px; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .status-badge { background: #065f46; padding: 5px 15px; border-radius: 20px; font-size: 12px; }
-        .card-container { display: grid; gap: 15px; }
-        .card { background: #1f2937; padding: 20px; border-radius: 15px; border: 1px solid #374151; }
-        .btn-order { background: #4f46e5; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
+            --accent-color: #3b82f6;
+            --success-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 20px 15px; min-height: 100vh; }
+        .container { width: 100%; max-width: 480px; margin: 0 auto; }
+        
+        /* Premium Header Styling */
+        .header { text-align: center; margin-bottom: 25px; background: var(--card-bg); padding: 22px; border-radius: 24px; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .header h1 { font-size: 26px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: var(--success-green); padding: 6px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.3); }
+        
+        /* Animated/Gradient Offer Banner */
+        .offer-banner { background: var(--primary-gradient); padding: 20px; border-radius: 24px; margin-bottom: 25px; box-shadow: 0 12px 24px rgba(168, 85, 247, 0.25); position: relative; overflow: hidden; }
+        .offer-banner h2 { font-size: 19px; font-weight: 700; margin-bottom: 4px; color: #ffffff; }
+        .offer-banner p { font-size: 13px; opacity: 0.95; color: #f3e8ff; }
+        .offer-tag { position: absolute; top: 12px; right: 12px; background: white; color: #a855f7; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 50px; text-transform: uppercase; }
+
+        /* Section Header Layout */
+        .section-title { font-size: 15px; font-weight: 700; margin-bottom: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
+        .section-title i { color: #6366f1; font-size: 16px; }
+
+        /* Grid Framework */
+        .grid { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        
+        /* Premium Glassmorphism Card Style */
+        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; border: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; gap: 15px; transition: transform 0.2s, border-color 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card:active { transform: scale(0.98); }
+        .card-info { display: flex; align-items: center; gap: 14px; }
+        .card-icon { width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.2); }
+        .card-text h3 { font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 3px; }
+        .card-text p { font-size: 12px; color: var(--text-muted); line-height: 1.3; }
+        .card-price { font-size: 13px; font-weight: 700; color: var(--success-green); margin-top: 4px; background: rgba(16, 185, 129, 0.1); display: inline-block; padding: 2px 8px; border-radius: 6px; }
+        
+        /* Quick Premium WhatsApp Button */
+        .btn-action { background: #22c55e; color: white; border: none; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2); }
+        .btn-action:active { transform: scale(0.95); }
+
+        /* Footer System */
+        .footer { text-align: center; margin-top: 40px; font-size: 11px; color: var(--text-muted); padding-top: 20px; border-top: 1px solid #1e293b; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Smart Mobile Care</h1>
-        <span class="status-badge"><i class="fa-solid fa-circle-check"></i> SHOP OPEN</span>
-    </div>
-
-    <div class="card-container">
-        <div class="card">
-            <h3><i class="fa-solid fa-mobile-screen"></i> Display Repair</h3>
-            <p>Original quality display replacement.</p>
-            <button class="btn-order" onclick="sendWhatsApp('Display Repair')">Book Now</button>
+    <div class="container">
+        
+        <div class="header">
+            <h1>Smart Mobile Care</h1>
+            <div class="status-badge"><i class="fa-solid fa-circle-check"></i> SHOP OPEN</div>
         </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-headphones"></i> Bluetooth Earbuds</h3>
-            <p>Premium sound, low price.</p>
-            <button class="btn-order" onclick="sendWhatsApp('Bluetooth Earbuds')">Book Now</button>
+
+        <div class="offer-banner">
+            <span class="offer-tag">Live Deal</span>
+            <h2>Today's Special Offer!</h2>
+            <p>Get a Premium Tempered Glass absolutely free with every Display Replacement!</p>
+        </div>
+
+        <div class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Professional Services</div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-info">
+                    <div class="card-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                    <div class="card-text">
+                        <h3>Display Replacement</h3>
+                        <p>Original Quality Setup & Warranty</p>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="orderViaWhatsApp('Display Replacement')"><i class="fa-brands fa-whatsapp"></i> Book</button>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <div class="card-icon"><i class="fa-solid fa-battery-full"></i></div>
+                    <div class="card-text">
+                        <h3>Battery Replacement</h3>
+                        <p>High Capacity Original Backup Log</p>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="orderViaWhatsApp('Battery Replacement')"><i class="fa-brands fa-whatsapp"></i> Book</button>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="card-text">
+                        <h3>Charging Port Fix</h3>
+                        <p>Fast Charging Issues Resolved</p>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="orderViaWhatsApp('Charging Port Repair')"><i class="fa-brands fa-whatsapp"></i> Book</button>
+            </div>
+        </div>
+
+        <div class="section-title"><i class="fa-solid fa-charging-station"></i> Premium Accessories</div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-info">
+                    <div class="card-icon"><i class="fa-solid fa-headphones"></i></div>
+                    <div class="card-text">
+                        <h3>Branded Earbuds / Neckband</h3>
+                        <p>High-End Heavy Bass Gadgets</p>
+                        <div class="card-price">Starting ₹999</div>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="orderViaWhatsApp('Premium Earbuds/Neckband Accessories')"><i class="fa-brands fa-whatsapp"></i> Buy</button>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <div class="card-icon"><i class="fa-solid fa-plug-circle-bolt"></i></div>
+                    <div class="card-text">
+                        <h3>Fast Chargers & Cables</h3>
+                        <p>High Speed Power Adapters</p>
+                        <div class="card-price">Starting ₹299</div>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="orderViaWhatsApp('Fast Chargers & Data Cables')"><i class="fa-brands fa-whatsapp"></i> Buy</button>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <div class="card-icon"><i class="fa-solid fa-mobile-rear"></i></div>
+                    <div class="card-text">
+                        <h3>Premium Mobile Covers</h3>
+                        <p>Military Grade Drop Protection</p>
+                        <div class="card-price">Starting ₹149</div>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="orderViaWhatsApp('Premium Mobile Covers')"><i class="fa-brands fa-whatsapp"></i> Buy</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Smart Mobile Care. All Rights Reserved.</p>
         </div>
     </div>
 
     <script>
-        function sendWhatsApp(service) {
-            const phoneNumber = "91XXXXXXXXXX"; // अपना नंबर यहाँ डालें
-            const url = `https://wa.me/${phoneNumber}?text=Hello, I want to book: ${service}`;
-            window.open(url, '_blank');
+        function orderViaWhatsApp(itemName) {
+            // यहाँ 91XXXXXXXXXX को हटाकर अपना असली नंबर कंट्री कोड के साथ डाल लें
+            const myPhoneNumber = "+91 9678491155"; 
+            const messageText = encodeURIComponent(`Hello Smart Mobile Care, I want to query/book about: ${itemName}. Please provide more details.`);
+            const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${messageText}`;
+            window.open(whatsappUrl, '_blank');
         }
     </script>
 </body>
