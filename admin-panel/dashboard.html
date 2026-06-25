@@ -57,7 +57,86 @@
             <p class="success-msg" id="offerSuccessMsg" style="display: none;">✅ Offer updated successfully on customer website!</p>
         </div>
 
+        <div class="admin-section">
+            <h3 class="section-title">🛒 Inventory Management (Add/Delete Products)</h3>
+            
+            <div class="add-product-box">
+                <h4 style="margin-bottom: 15px; color: #1e293b;">➕ Add New Product</h4>
+                <div class="form-grid">
+                    <select id="productCategory" class="admin-input">
+                        <option value="Wireless Earbuds">Wireless Earbuds</option>
+                        <option value="Neckbands">Neckbands</option>
+                        <option value="Wired Earphones">Wired Earphones</option>
+                        <option value="Bluetooth Speakers">Bluetooth Speakers</option>
+                    </select>
+                    <input type="text" id="productName" class="admin-input" placeholder="Product Name (e.g., AirPods Pro)">
+                    <input type="text" id="productPrice" class="admin-input" placeholder="Price (e.g., ₹1999)">
+                    <input type="text" id="productFeatures" class="admin-input" placeholder="Features (e.g., Noise Cancellation)">
+                    <button class="btn-add" id="btnAddProduct">Add Product</button>
+                </div>
+            </div>
+
+            <div class="product-list-admin">
+                <h4 style="margin-bottom: 15px; color: #1e293b;">📦 Currently Listed Products</h4>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminProductTableBody">
+                        <tr>
+                            <td>Neckbands</td>
+                            <td>OnePlus Bullets Z2</td>
+                            <td>₹1,999</td>
+                            <td><button class="btn-delete">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h3 class="section-title">🛠️ Repair Parts Stock Control</h3>
+            <p style="margin-bottom: 20px; color: #64748b; font-size: 14px;">If any part is out of stock, turn it OFF here.</p>
+            
+            <div class="stock-grid">
+                <div class="stock-item">
+                    <span>📱 Display & Combo</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="stock-item">
+                    <span>⚙️ Motherboard ICs</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="stock-item">
+                    <span>🔌 Charging Ports</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="stock-item">
+                    <span>🔋 Batteries</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <script src="dashboard.js"></script>
 </body>
 </html>
