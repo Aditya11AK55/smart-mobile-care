@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Portal - Master Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="super-login-container">
+        <div class="super-login-box">
+            <div class="crown-icon">👑</div>
+            <h2>Super Admin Access</h2>
+            <p>Master control panel for all operations</p>
+            
+            <form id="superLoginForm">
+                <div class="input-group">
+                    <label>Master Username</label>
+                    <input type="text" id="superUser" placeholder="Enter master username" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Master Password</label>
+                    <input type="password" id="superPass" placeholder="Enter master password" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Security Auth PIN</label>
+                    <input type="password" id="superPin" placeholder="4-digit secure PIN" required>
+                </div>
+
+                <button type="button" class="btn-super" id="btnSuperLogin">Verify & Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
