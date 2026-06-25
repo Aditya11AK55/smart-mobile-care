@@ -149,3 +149,87 @@ actionBtn.addEventListener("click", function() {
         modal.style.display = "none"; // Close modal
     }
 });
+// --- 9. Shopping Section Logic (E-commerce) ---
+
+const shoppingModal = document.getElementById("shoppingModal");
+const closeShopBtn = document.querySelector(".close-shop-btn");
+const shopCards = document.querySelectorAll(".shop-card");
+const productList = document.getElementById("productList");
+const shoppingModalTitle = document.getElementById("shoppingModalTitle");
+
+// Demo Database for Products (Later, this will come dynamically from the Shop Owner Panel)
+const productsDatabase = {
+    "Wireless Earbuds": [
+        { name: "boAt Airdopes 141", features: "42H Playtime, 8mm Drivers", price: "₹1,299", icon: "🎧" },
+        { name: "Realme Buds T100", features: "28H Playtime, AI ENC for Calls", price: "₹1,499", icon: "🎧" }
+    ],
+    "Neckbands": [
+        { name: "OnePlus Bullets Z2", features: "Fast Charge, 30H Battery Life", price: "₹1,999", icon: "🔌" },
+        { name: "boAt Rockerz 255 Pro+", features: "40H Playtime, ASAP Charge", price: "₹1,399", icon: "🔌" }
+    ],
+    "Wired Earphones": [
+        { name: "JBL C100SI", features: "Extra Deep Bass, In-line Mic", price: "₹599", icon: "🎧" },
+        { name: "Realme Buds 2", features: "11.2mm Driver, Tangle Free Cable", price: "₹599", icon: "🎧" }
+    ],
+    "Bluetooth Speakers": [
+        { name: "JBL Go 2", features: "Waterproof, 5H Playtime", price: "₹1,799", icon: "🔊" },
+        { name: "boAt Stone 190", features: "52mm Driver, IPX7 Water Resistance", price: "₹999", icon: "🔊" }
+    ]
+};
+
+// Open Shopping Modal and show products when a category is clicked
+shopCards.forEach(card => {
+    card.addEventListener("click", function() {
+        const categoryName = this.querySelector("h3").innerText;
+        shoppingModalTitle.innerText = categoryName + " (Available Stock)";
+        
+        // Clear previous list
+        productList.innerHTML = "";
+
+        // Get products from our database for the clicked category
+        const items = productsDatabase[categoryName];
+        
+        if (items && items.length > 0) {
+            items.forEach(item => {
+                // Create product HTML dynamically
+                const productItem = document.createElement("div");
+                productItem.className = "product-item";
+                
+                productItem.innerHTML = `
+                    <div class="product-image-placeholder">${item.icon}</div>
+                    <div class="product-details">
+                        <h4>${item.name}</h4>
+                        <p>${item.features}</p>
+                        <div class="product-price">${item.price}</div>
+                        <button class="btn-buy-whatsapp" onclick="buyProduct('${item.name}', '${item.price}')">Buy on WhatsApp</button>
+                    </div>
+                `;
+                productList.appendChild(productItem);
+            });
+        } else {
+            productList.innerHTML = "<p style='text-align:center; padding:20px;'>Sorry, no products available in this category right now.</p>";
+        }
+        
+        shoppingModal.style.display = "block"; // Show the popup
+    });
+});
+
+// Close Shopping Modal
+closeShopBtn.addEventListener("click", () => {
+    shoppingModal.style.display = "none";
+});
+window.addEventListener("click", (event) => {
+    if (event.target === shoppingModal) shoppingModal.style.display = "none";
+});
+
+// Function to handle 'Buy on WhatsApp' Button Click
+function buyProduct(productName, productPrice) {
+    const shopOwnerWhatsAppNumber = "919876543210"; // REPLACE WITH YOUR SHOP NUMBER
+    
+    // Prepare a beautiful message for the shop owner
+    const message = `Hello, I want to buy an accessory from your website.\n\n*Product:* ${productName}\n*Price:* ${productPrice}\n\nPlease let me know how to proceed with the payment and delivery.`;
+    
+    // Open WhatsApp in a new tab
+    const whatsappURL = `https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
+}
