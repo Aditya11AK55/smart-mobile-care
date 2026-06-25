@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin - Master Dashboard</title>
+    <link rel="stylesheet" href="super-dashboard.css">
+</head>
+<body>
+
+    <nav class="super-nav">
+        <div class="nav-brand">👑 SUPER ADMIN PORTAL</div>
+        <a href="index.html" class="btn-logout-super">System Logout</a>
+    </nav>
+
+    <div class="super-container">
+        
+        <div class="header-section">
+            <h2>Master Control Panel</h2>
+            <p>Monitor and manage all shop admins, global settings, and total system statistics.</p>
+        </div>
+
+        <div class="super-stats-grid">
+            <div class="super-card">
+                <h3>Total Shop Admins</h3>
+                <p class="super-number">1</p>
+            </div>
+            <div class="super-card">
+                <h3>Total Registered Products</h3>
+                <p class="super-number">24</p>
+            </div>
+            <div class="super-card">
+                <h3>System Server Status</h3>
+                <p class="super-number" style="color: #10b981; font-size: 26px;">Online ✅</p>
+            </div>
+        </div>
+
+        <div class="super-section">
+            <h3>👥 Manage Shop Admins</h3>
+            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend or block shop owners from accessing their dashboard.</p>
+            
+            <table class="super-table">
+                <thead>
+                    <tr>
+                        <th>Admin Username</th>
+                        <th>Mobile Number</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="masterAdminTableBody">
+                    <tr>
+                        <td>Shop Owner 1 (Main)</td>
+                        <td>9876543210</td>
+                        <td><span class="status-active">Active</span></td>
+                        <td><button class="btn-block" id="btnBlockAdmin">Block Access</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="super-section">
+            <h3>⚙️ Global System Settings</h3>
+            
+            <div class="setting-item">
+                <div class="setting-text">
+                    <h4 style="color: #d4af37; margin-bottom: 5px;">Maintenance Mode</h4>
+                    <p style="color: #888; font-size: 13px;">Turn this ON to temporarily hide the customer website for updates.</p>
+                </div>
+                <label class="switch-super">
+                    <input type="checkbox" id="maintenanceToggle">
+                    <span class="slider-super round"></span>
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="super-dashboard.js"></script>
+</body>
+</html>
