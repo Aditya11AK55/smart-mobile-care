@@ -40,7 +40,7 @@
         <!-- Admin Management Section -->
         <div class="super-section">
             <h3>👥 Manage Shop Admins</h3>
-            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend or block shop owners from accessing their dashboard.</p>
+            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend (block) or permanently delete shop owners.</p>
             
             <table class="super-table">
                 <thead>
@@ -56,13 +56,44 @@
                         <td>Shop Owner 1 (Main)</td>
                         <td>9876543210</td>
                         <td><span class="status-active">Active</span></td>
-                        <td><button class="btn-block" id="btnBlockAdmin">Block Access</button></td>
+                        <td>
+                            <button class="btn-block">Block</button>
+                            <button class="btn-delete-super">Delete</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Security Key Generator Section (यह नया सेक्शन हमने यहाँ जोड़ दिया है) -->
+        <!-- Customer Management Section (नया सेक्शन) -->
+        <div class="super-section">
+            <h3>👤 Manage Customers</h3>
+            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend (block) or permanently delete registered customers.</p>
+            
+            <table class="super-table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Mobile Number</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="masterCustomerTableBody">
+                    <tr>
+                        <td>Rahul Kumar</td>
+                        <td>9123456789</td>
+                        <td><span class="status-active">Active</span></td>
+                        <td>
+                            <button class="btn-block">Block</button>
+                            <button class="btn-delete-super">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Security Key Generator Section -->
         <div class="super-section">
             <h3>🔑 Generate Admin Security Key</h3>
             <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Generate a unique secret code to give to new shop owners for registration.</p>
