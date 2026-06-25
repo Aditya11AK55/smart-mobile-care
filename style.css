@@ -35,3 +35,80 @@ body {
     font-weight: bold;
     border-bottom: 2px solid #218838; /* Slightly darker green border at the bottom */
 }
+/* Intro Box Design */
+.intro-box {
+    background-color: #e9ecef; /* Light grey background */
+    margin: 20px auto; /* Centers the box */
+    width: 90%;
+    max-width: 800px;
+    padding: 15px 20px;
+    text-align: center;
+    border-radius: 8px; /* Smooth corners */
+    color: #495057;
+    font-size: 16px;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+}
+
+/* Services Section */
+.services-section {
+    margin: 30px auto;
+    width: 90%;
+    max-width: 1000px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333333;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 2x2 Grid Layout for Boxes */
+.services-grid {
+    display: grid;
+    /* This creates exactly 2 columns on desktop and adjusts automatically on mobile */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Individual Service Box (Card) Design */
+.service-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow */
+    border: 1px solid #eaeaea;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover Effect: When user puts mouse on the box */
+.service-card:hover {
+    transform: translateY(-5px); /* Moves box slightly up */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15); /* Darker shadow */
+    border-color: #007bff; /* Blue border on hover */
+}
+
+/* Icon Design */
+.service-card .icon {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+/* Box Title */
+.service-card h3 {
+    font-size: 18px;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+/* Box Description */
+.service-card p {
+    font-size: 14px;
+    color: #666666;
+    line-height: 1.4;
+}
