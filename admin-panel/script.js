@@ -67,8 +67,8 @@ btnLogin.addEventListener('click', () => {
         return;
     }
     
-    // Once backend is connected, this will check database. For now, it shows a success message.
-    alert("Login Successful! (Your Shop Dashboard will open here)");
+    // Redirecting to Dashboard Page (यह लाइन हमने नई जोड़ी है)
+    window.location.href = "dashboard.html";
 });
 
 // Create Account Button Logic
