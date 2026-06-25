@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0a0a0a; /* Deep black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.super-login-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.super-login-box {
+    background: linear-gradient(145deg, #141414, #1f1f1f);
+    border: 1px solid #d4af37; /* Premium Gold border */
+    border-radius: 12px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15); /* Gold glow */
+    text-align: center;
+}
+
+.crown-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.super-login-box h2 {
+    color: #d4af37; /* Gold text */
+    font-size: 26px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.super-login-box p {
+    color: #888888;
+    font-size: 14px;
+    margin-bottom: 35px;
+}
+
+/* Input Fields */
+.input-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    color: #cccccc;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #333333;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #ffffff;
+    background-color: #000000;
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+}
+
+/* Super Admin Button */
+.btn-super {
+    width: 100%;
+    background-color: #d4af37; /* Gold Button */
+    color: #000000;
+    border: none;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-super:hover {
+    background-color: #b5952f;
+    transform: scale(1.02);
+}
