@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Owner Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-brand">📱 Admin Dashboard</div>
+        <div class="nav-profile">
+            <span>Welcome, Shop Owner</span>
+            <a href="index.html" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        
+        <div class="page-header">
+            <h2>Overview & Statistics</h2>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: #dbeafe; color: #2563eb;">💬</div>
+                <div class="stat-details">
+                    <h3>Today's Enquiries</h3>
+                    <p class="stat-number">12</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: #fef08a; color: #ca8a04;">⏳</div>
+                <div class="stat-details">
+                    <h3>Pending 'Notify Me'</h3>
+                    <p class="stat-number">5</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: #dcfce7; color: #16a34a;">📦</div>
+                <div class="stat-details">
+                    <h3>Total Products</h3>
+                    <p class="stat-number">24</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h3 class="section-title">📢 Update Today's Offer (Marquee)</h3>
+            <div class="offer-manager-box">
+                <input type="text" id="offerInput" placeholder="Type new offer text here (e.g., Get 20% off on Earbuds!)..." value="🎉 TODAY'S SPECIAL OFFER: Get up to ₹299 OFF on any new Premium Neckband! 🔥">
+                <button class="btn-update" id="btnUpdateOffer">Update Offer</button>
+            </div>
+            <p class="success-msg" id="offerSuccessMsg" style="display: none;">✅ Offer updated successfully on customer website!</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
