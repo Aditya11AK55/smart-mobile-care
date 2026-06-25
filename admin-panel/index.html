@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Owner Portal - Secure Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="lock-icon">🔒</div>
+            <h2 id="formTitle">Owner Login</h2>
+            <p id="formSubtitle">Enter your credentials to access the dashboard</p>
+
+            <form id="loginForm" class="active-form">
+                <div class="input-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="loginMobile" placeholder="Enter 10-digit number" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                <button type="button" class="btn-primary" id="btnLogin">Secure Login</button>
+                
+                <div class="form-links">
+                    <a href="#" id="linkForgot">Forgot Password?</a>
+                    <a href="#" id="linkCreate">Create New Account</a>
+                </div>
+            </form>
+
+            <form id="registerForm" class="hidden-form">
+                <div class="input-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="regMobile" placeholder="Enter 10-digit number" required>
+                </div>
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input type="password" id="regPassword" placeholder="Create a strong password" required>
+                </div>
+                <div class="input-group">
+                    <label>Security Code <span class="badge">Provided by Admin</span></label>
+                    <input type="text" id="regCode" placeholder="Enter 8-digit secret code" required>
+                </div>
+                <button type="button" class="btn-primary" id="btnRegister">Verify & Create Account</button>
+                
+                <div class="form-links center-link">
+                    <a href="#" id="linkBackToLogin1">Back to Login</a>
+                </div>
+            </form>
+
+            <form id="forgotForm" class="hidden-form">
+                <div class="input-group">
+                    <label>Registered Mobile Number</label>
+                    <input type="tel" id="forgotMobile" placeholder="Enter registered number" required>
+                </div>
+                <div class="input-group">
+                    <label>Security Code (Used during signup)</label>
+                    <input type="text" id="forgotCode" placeholder="Enter your secret code" required>
+                </div>
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input type="password" id="forgotNewPassword" placeholder="Enter new password" required>
+                </div>
+                <button type="button" class="btn-primary" id="btnResetPass">Reset Password</button>
+                
+                <div class="form-links center-link">
+                    <a href="#" id="linkBackToLogin2">Back to Login</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
