@@ -1,4 +1,4 @@
-// === 1. Admin Block/Unblock Logic (एडमिन को ब्लॉक करने का कोड) ===
+// === 1. Admin Block/Unblock Logic ===
 const masterAdminTableBody = document.getElementById('masterAdminTableBody');
 
 masterAdminTableBody.addEventListener('click', (e) => {
@@ -36,7 +36,7 @@ masterAdminTableBody.addEventListener('click', (e) => {
     }
 });
 
-// === 2. Global Maintenance Mode Logic (वेबसाइट बंद/चालू करने का कोड) ===
+// === 2. Global Maintenance Mode Logic ===
 const maintenanceToggle = document.getElementById('maintenanceToggle');
 
 maintenanceToggle.addEventListener('change', function() {
@@ -49,4 +49,26 @@ maintenanceToggle.addEventListener('change', function() {
         alert("✅ Maintenance Mode is now OFF. The customer website is live and accessible to everyone.");
         console.log("System Status: ONLINE");
     }
+});
+
+// === 3. Generate Security Key Logic ===
+const btnGenerateKey = document.getElementById('btnGenerateKey');
+const generatedKeyInput = document.getElementById('generatedKey');
+
+btnGenerateKey.addEventListener('click', () => {
+    // Generate an 8-character random security code
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let newKey = '';
+    for (let i = 0; i < 8; i++) {
+        newKey += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    
+    // Format the key with a dash for readability (e.g., AB12-CD34)
+    const formattedKey = newKey.slice(0, 4) + '-' + newKey.slice(4, 8);
+    
+    // Display the code in the input box
+    generatedKeyInput.value = formattedKey;
+    
+    // Show success alert
+    alert(`New Security Key Generated: ${formattedKey}\n\nYou can share this secret code with the new shop owner for their registration.`);
 });
