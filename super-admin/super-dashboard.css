@@ -228,3 +228,19 @@ input:checked + .slider-super:before {
 .slider-super.round:before {
     border-radius: 50%;
 }
+/* Super Delete Button */
+.btn-delete-super {
+    background-color: #475569; /* Dark Grey Color */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-left: 5px;
+}
+
+.btn-delete-super:hover {
+    background-color: #334155;
+}
