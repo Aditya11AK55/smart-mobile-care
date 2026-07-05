@@ -42,27 +42,30 @@
             <h3>👥 Manage Shop Admins</h3>
             <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend (block) or permanently delete shop owners.</p>
             
-            <table class="super-table">
-                <thead>
-                    <tr>
-                        <th>Admin Username</th>
-                        <th>Mobile Number</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="masterAdminTableBody">
-                    <tr>
-                        <td>Shop Owner 1 (Main)</td>
-                        <td>9876543210</td>
-                        <td><span class="status-active">Active</span></td>
-                        <td>
-                            <button class="btn-block">Block</button>
-                            <button class="btn-delete-super">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- 🔥 टेबल को बाहर जाने से रोकने के लिए नया DIV जोड़ा गया है 🔥 -->
+            <div style="overflow-x: auto; width: 100%; white-space: nowrap;">
+                <table class="super-table">
+                    <thead>
+                        <tr>
+                            <th>Admin Username</th>
+                            <th>Mobile Number</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="masterAdminTableBody">
+                        <tr>
+                            <td>Shop Owner 1 (Main)</td>
+                            <td>9876543210</td>
+                            <td><span class="status-active">Active</span></td>
+                            <td>
+                                <button class="btn-block">Block</button>
+                                <button class="btn-delete-super">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         
         <!-- Customer Management Section -->
@@ -70,27 +73,30 @@
             <h3>👤 Manage Customers</h3>
             <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend (block) or permanently delete registered customers.</p>
             
-            <table class="super-table">
-                <thead>
-                    <tr>
-                        <th>Customer Name</th>
-                        <th>Mobile Number</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="masterCustomerTableBody">
-                    <tr>
-                        <td>Rahul Kumar</td>
-                        <td>9123456789</td>
-                        <td><span class="status-active">Active</span></td>
-                        <td>
-                            <button class="btn-block">Block</button>
-                            <button class="btn-delete-super">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- 🔥 टेबल को बाहर जाने से रोकने के लिए नया DIV जोड़ा गया है 🔥 -->
+            <div style="overflow-x: auto; width: 100%; white-space: nowrap;">
+                <table class="super-table">
+                    <thead>
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Mobile Number</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="masterCustomerTableBody">
+                        <tr>
+                            <td>Rahul Kumar</td>
+                            <td>9123456789</td>
+                            <td><span class="status-active">Active</span></td>
+                            <td>
+                                <button class="btn-block">Block</button>
+                                <button class="btn-delete-super">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Security Key Generator Section -->
