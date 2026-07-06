@@ -1,6 +1,6 @@
-// === 🔥 FIREBASE SETUP (आपका जादुई क्लाउड कनेक्शन) 🔥 ===
+// === 🔥 FIREBASE SETUP 🔥 ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC0P1T-OxFHBYSWq9m5xHdL-tiDdQXsgsY",
@@ -14,16 +14,66 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// === 0. Security Check (Optional but good) ===
-// चेक करें कि क्या दुकानदार लॉगिन करके ही आया है
 const loggedInUser = localStorage.getItem("loggedInAdminMobile");
 if (!loggedInUser) {
-    // अगर बिना लॉगिन के डैशबोर्ड खोलने की कोशिश की, तो वापस लॉगिन पेज पर फेंक दें
     window.location.href = "index.html";
 }
 
+// === 0. SHOP CLOSURE LOGIC (NEW) ===
+const btnSetClosed = document.getElementById('btnSetClosed');
+const btnSetOpen = document.getElementById('btnSetOpen');
+const closeStartDate = document.getElementById('closeStartDate');
+const closeEndDate = document.getElementById('closeEndDate');
+const closeReason = document.getElementById('closeReason');
+const closureStatusMsg = document.getElementById('closureStatusMsg');
 
-// === 1. Update Offer Logic (🔥 SAVING TO FIREBASE 🔥) ===
+async function loadShopStatus() {
+    try {
+        const snap = await getDoc(doc(db, "settings", "shop_status"));
+        if (snap.exists() && snap.data().isClosed) {
+            const data = snap.data();
+            closureStatusMsg.innerText = `🔴 Currently marked CLOSED from ${data.startDate} to ${data.endDate} (${data.reason})`;
+            closureStatusMsg.style.color = "red";
+        } else {
+            closureStatusMsg.innerText = "🟢 Shop is currently OPEN.";
+            closureStatusMsg.style.color = "green";
+        }
+    } catch(e) { console.error(e); }
+}
+loadShopStatus();
+
+btnSetClosed.addEventListener('click', async () => {
+    if(!closeStartDate.value || !closeEndDate.value) {
+        alert("Please select both Start and End dates.");
+        return;
+    }
+    btnSetClosed.innerText = "Saving...";
+    try {
+        await setDoc(doc(db, "settings", "shop_status"), {
+            isClosed: true,
+            startDate: closeStartDate.value,
+            endDate: closeEndDate.value,
+            reason: closeReason.value || "Shop Closed"
+        });
+        alert("✅ Shop closed notice is now LIVE on customer website!");
+        loadShopStatus();
+    } catch(e) { console.error(e); }
+    btnSetClosed.innerText = "Set Shop Closed";
+});
+
+btnSetOpen.addEventListener('click', async () => {
+    btnSetOpen.innerText = "Opening...";
+    try {
+        await setDoc(doc(db, "settings", "shop_status"), { isClosed: false });
+        alert("✅ Shop is now OPEN. Notice removed from website.");
+        closeStartDate.value = ""; closeEndDate.value = ""; closeReason.value = "";
+        loadShopStatus();
+    } catch(e) { console.error(e); }
+    btnSetOpen.innerText = "Remove Notice (Set Open)";
+});
+
+
+// === 1. Update Offer Logic ===
 const btnUpdateOffer = document.getElementById('btnUpdateOffer');
 const offerInput = document.getElementById('offerInput');
 const offerSuccessMsg = document.getElementById('offerSuccessMsg');
@@ -40,17 +90,13 @@ btnUpdateOffer.addEventListener('click', async () => {
     btnUpdateOffer.disabled = true;
 
     try {
-        // 'settings' नाम का फोल्डर और 'global_offer' नाम की फाइल में सेव करें
         await setDoc(doc(db, "settings", "global_offer"), {
             text: offerText,
             updatedAt: serverTimestamp()
         });
-
-        // Show success message
         offerSuccessMsg.style.display = "block";
         setTimeout(() => { offerSuccessMsg.style.display = "none"; }, 3000);
     } catch (error) {
-        console.error("Offer Update Error: ", error);
         alert("❌ Database Error! Could not update offer.");
     } finally {
         btnUpdateOffer.innerText = originalText;
@@ -59,22 +105,25 @@ btnUpdateOffer.addEventListener('click', async () => {
 });
 
 
-// === 2. LOAD PRODUCTS FROM FIREBASE (पेज खुलते ही प्रोडक्ट्स लाना) ===
+// === 2. LOAD PRODUCTS & UPDATE TOTAL COUNT ===
 const adminProductTableBody = document.getElementById('adminProductTableBody');
+const statProducts = document.getElementById('statProducts');
 
 async function loadProducts() {
     adminProductTableBody.innerHTML = "<tr><td colspan='4'>Loading products from cloud... ⏳</td></tr>";
     
     try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        adminProductTableBody.innerHTML = ""; // टेबल खाली करें
+        adminProductTableBody.innerHTML = ""; 
         
         if(querySnapshot.empty) {
             adminProductTableBody.innerHTML = "<tr><td colspan='4'>No products found. Add one above!</td></tr>";
+            statProducts.innerText = "0"; // असली 0
             return;
         }
 
-        // हर प्रोडक्ट को डेटाबेस से निकाल कर टेबल में दिखाएं
+        statProducts.innerText = querySnapshot.size; // 🔥 डेटाबेस से असली प्रोडक्ट की गिनती
+
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const newRow = document.createElement('tr');
@@ -87,15 +136,13 @@ async function loadProducts() {
             adminProductTableBody.appendChild(newRow);
         });
     } catch (error) {
-        console.error("Error loading products:", error);
         adminProductTableBody.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data!</td></tr>";
     }
 }
-// पेज लोड होते ही यह फंक्शन खुद-ब-खुद चल जाएगा
 loadProducts();
 
 
-// === 3. ADD NEW PRODUCT TO INVENTORY (🔥 SAVING TO FIREBASE 🔥) ===
+// === 3. ADD NEW PRODUCT ===
 const btnAddProduct = document.getElementById('btnAddProduct');
 const productCategory = document.getElementById('productCategory');
 const productName = document.getElementById('productName');
@@ -118,26 +165,20 @@ btnAddProduct.addEventListener('click', async () => {
     btnAddProduct.disabled = true;
 
     try {
-        // डेटाबेस में 'products' नाम के फोल्डर में सेव करें
         await addDoc(collection(db, "products"), {
             category: category,
             name: name,
             price: price,
             features: features,
-            addedBy: loggedInUser, // किसने ऐड किया
+            addedBy: loggedInUser,
             createdAt: serverTimestamp()
         });
 
-        // Clear input fields
-        productName.value = "";
-        productPrice.value = "";
-        productFeatures.value = "";
-
+        productName.value = ""; productPrice.value = ""; productFeatures.value = "";
         alert("✅ Product Added Successfully to Cloud!");
-        loadProducts(); // प्रोडक्ट ऐड होने के बाद टेबल को तुरंत रिफ्रेश करें
+        loadProducts(); 
         
     } catch (error) {
-        console.error("Error adding product: ", error);
         alert("❌ Error adding product to database.");
     } finally {
         btnAddProduct.innerText = originalText;
@@ -146,43 +187,24 @@ btnAddProduct.addEventListener('click', async () => {
 });
 
 
-// === 4. DELETE PRODUCT FROM INVENTORY (🔥 DELETING FROM FIREBASE 🔥) ===
+// === 4. DELETE PRODUCT ===
 adminProductTableBody.addEventListener('click', async (e) => {
     if (e.target.classList.contains('btn-delete')) {
-        const confirmDelete = confirm("⚠️ Are you sure you want to permanently delete this product?");
-        if (confirmDelete) {
-            
+        if (confirm("⚠️ Are you sure you want to permanently delete this product?")) {
             const btn = e.target;
-            const productId = btn.getAttribute("data-id"); // डेटाबेस वाली असली ID
+            const productId = btn.getAttribute("data-id");
             btn.innerText = "Deleting...";
             btn.disabled = true;
 
             try {
-                // डेटाबेस से उस प्रोडक्ट को हमेशा के लिए उड़ा दें
                 await deleteDoc(doc(db, "products", productId));
                 alert("✅ Product deleted from cloud.");
-                loadProducts(); // टेबल रिफ्रेश करें
+                loadProducts();
             } catch (error) {
-                console.error("Error deleting product: ", error);
                 alert("❌ Could not delete product.");
                 btn.innerText = "Delete";
                 btn.disabled = false;
             }
         }
     }
-});
-
-
-// === 5. Stock Control Toggle Logic (अभी के लिए सिर्फ Console में) ===
-const toggleSwitches = document.querySelectorAll('.switch input');
-toggleSwitches.forEach(toggle => {
-    toggle.addEventListener('change', function() {
-        const partName = this.parentElement.previousElementSibling.innerText;
-        if (this.checked) {
-            console.log(partName + " is now IN STOCK.");
-        } else {
-            console.log(partName + " is now OUT OF STOCK.");
-            alert(`Warning: ${partName} is marked out of stock. Customers will see 'Notify Me' on the website.`);
-        }
-    });
 });
