@@ -14,22 +14,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// === 0. LIVE OFFER FETCH (डेटाबेस से लाइव ऑफर लाना) ===
+// === 0. LIVE OFFER FETCH ===
 async function loadLiveOffer() {
     try {
         const offerSnap = await getDoc(doc(db, "settings", "global_offer"));
         const marquee = document.getElementById("offerMarquee");
-        if (offerSnap.exists() && marquee) {
-            marquee.innerText = `🎉 ${offerSnap.data().text} 🔥`;
-        }
-    } catch (error) {
-        console.error("Error loading offer:", error);
-    }
+        if (offerSnap.exists() && marquee) { marquee.innerText = `🎉 ${offerSnap.data().text} 🔥`; }
+    } catch (error) { console.error("Error loading offer:", error); }
 }
-loadLiveOffer(); // पेज खुलते ही ऑफर लोड करें
+loadLiveOffer();
 
-
-// === 0.1 LIVE SHOP CLOSURE FETCH (दुकान बंद है या नहीं, चेक करना) ===
+// === 0.1 LIVE SHOP CLOSURE FETCH ===
 async function loadShopStatus() {
     try {
         const snap = await getDoc(doc(db, "settings", "shop_status"));
@@ -41,12 +36,9 @@ async function loadShopStatus() {
         } else if (banner) {
             banner.style.display = "none";
         }
-    } catch (error) {
-        console.error("Error loading shop status:", error);
-    }
+    } catch (error) { console.error("Error loading shop status:", error); }
 }
-loadShopStatus(); // पेज खुलते ही चेक करेगा
-
+loadShopStatus();
 
 // === 1. Dynamic Data for Mobile Brands & Models ===
 const mobileModels = {
@@ -73,31 +65,25 @@ const actionBtn = document.getElementById("actionBtn");
 let currentService = "";
 let isPartAvailable = false;
 
-// Open Modal
 serviceCards.forEach(card => {
     card.addEventListener("click", function() {
         currentService = this.querySelector("h3").innerText;
         document.getElementById("modalTitle").innerText = "Book: " + currentService;
-        
         resultSection.style.display = "none";
         checkAvailabilityBtn.style.display = "block";
         brandSelect.value = "";
         modelSelect.innerHTML = '<option value="">-- Choose Model --</option><option value="Other">Other</option>';
         otherDeviceGroup.style.display = "none";
-        
         modal.style.display = "block";
     });
 });
 
-// Close Modal
 closeBtn.addEventListener("click", () => modal.style.display = "none");
 window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
 
-// Populate Models
 brandSelect.addEventListener("change", function() {
     const selectedBrand = this.value;
     modelSelect.innerHTML = '<option value="">-- Choose Model --</option>';
-
     if (selectedBrand === "Other") {
         otherDeviceGroup.style.display = "block";
         modelSelect.innerHTML += '<option value="Other">Other</option>';
@@ -117,19 +103,14 @@ brandSelect.addEventListener("change", function() {
 });
 
 modelSelect.addEventListener("change", function() {
-    if (this.value === "Other") {
-        otherDeviceGroup.style.display = "block";
-    } else {
-        otherDeviceGroup.style.display = "none";
-    }
+    if (this.value === "Other") { otherDeviceGroup.style.display = "block"; } 
+    else { otherDeviceGroup.style.display = "none"; }
 });
 
-// Check Availability (Dummy Logic fixed)
 checkAvailabilityBtn.addEventListener("click", () => {
-    isPartAvailable = Math.random() > 0.3; // 70% chance available
+    isPartAvailable = Math.random() > 0.3; 
     checkAvailabilityBtn.style.display = "none";
     resultSection.style.display = "block";
-    
     if (isPartAvailable) {
         resultMessage.innerHTML = "✅ Part is <b>Available</b> in stock!";
         resultMessage.style.color = "green";
@@ -143,23 +124,17 @@ checkAvailabilityBtn.addEventListener("click", () => {
     }
 });
 
-// Send WhatsApp Message for Booking
 actionBtn.addEventListener("click", () => {
     let deviceName = modelSelect.value;
-    if (deviceName === "Other") {
-        deviceName = document.getElementById("otherDeviceInput").value;
-    }
+    if (deviceName === "Other") { deviceName = document.getElementById("otherDeviceInput").value; }
     const condition = document.getElementById("deviceCondition").value;
     const customerName = document.getElementById("customerName").value;
     const customerPhone = document.getElementById("customerPhone").value;
 
-    if (!deviceName || !customerName || !customerPhone) {
-        alert("Please fill all required fields!");
-        return;
-    }
+    if (!deviceName || !customerName || !customerPhone) { alert("Please fill all required fields!"); return; }
 
     if (isPartAvailable) {
-        const shopOwnerWhatsAppNumber = "919876543210"; // <--- यहाँ अपना असली नंबर डालें
+        const shopOwnerWhatsAppNumber = "919876543210"; 
         const message = `Hello, I need a repair service.\n\n*Service:* ${currentService}\n*Device:* ${brandSelect.value} ${deviceName}\n*Condition:* ${condition}\n*My Name:* ${customerName}\n*My Number:* ${customerPhone}\n\nPlease let me know the cost.`;
         window.open(`https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
     } else {
@@ -169,7 +144,7 @@ actionBtn.addEventListener("click", () => {
 });
 
 
-// === 3. LIVE SHOPPING SECTION (डेटाबेस से प्रोडक्ट्स लाना) ===
+// === 3. LIVE SHOPPING SECTION ===
 const shoppingModal = document.getElementById("shoppingModal");
 const closeShopBtn = document.querySelector(".close-shop-btn");
 const shopCards = document.querySelectorAll(".shop-card");
@@ -184,10 +159,8 @@ shopCards.forEach(card => {
         shoppingModal.style.display = "block";
 
         try {
-            // Firebase से सिर्फ उसी केटेगरी के प्रोडक्ट मंगाएं जिस पर क्लिक किया है
             const q = query(collection(db, "products"), where("category", "==", categoryName));
             const querySnapshot = await getDocs(q);
-            
             shoppingModalTitle.innerText = categoryName + " (Available Stock)";
             productList.innerHTML = "";
 
@@ -196,8 +169,6 @@ shopCards.forEach(card => {
                     const item = docSnap.data();
                     const productItem = document.createElement("div");
                     productItem.className = "product-item";
-                    
-                    // Icon logic based on category
                     let icon = "📦";
                     if (categoryName.includes("Earbuds") || categoryName.includes("Earphones")) icon = "🎧";
                     else if (categoryName.includes("Neckband")) icon = "🔌";
@@ -215,7 +186,6 @@ shopCards.forEach(card => {
                     productList.appendChild(productItem);
                 });
 
-                // Attach WhatsApp click logic dynamically for module scope
                 document.querySelectorAll(".btn-buy-whatsapp").forEach(btn => {
                     btn.addEventListener("click", (e) => {
                         const pName = e.target.getAttribute("data-name");
@@ -223,12 +193,10 @@ shopCards.forEach(card => {
                         window.buyProduct(pName, pPrice);
                     });
                 });
-
             } else {
                 productList.innerHTML = "<p style='text-align:center; padding:20px;'>Sorry, no products available in this category right now.</p>";
             }
         } catch (error) {
-            console.error("Error loading products:", error);
             productList.innerHTML = "<p style='text-align:center; padding:20px; color:red;'>Error connecting to database.</p>";
         }
     });
@@ -237,10 +205,87 @@ shopCards.forEach(card => {
 closeShopBtn.addEventListener("click", () => shoppingModal.style.display = "none");
 window.addEventListener("click", (e) => { if (e.target === shoppingModal) shoppingModal.style.display = "none"; });
 
-// Global function made accessible for Module
 window.buyProduct = function(productName, productPrice) {
-    const shopOwnerWhatsAppNumber = "919876543210"; // <--- यहाँ अपना असली नंबर डालें
+    const shopOwnerWhatsAppNumber = "919876543210"; 
     const message = `Hello, I want to buy an accessory from your website.\n\n*Product:* ${productName}\n*Price:* ${productPrice}\n\nPlease let me know how to proceed with the payment and delivery.`;
     window.open(`https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
 };
-                              
+
+
+// === 🌟 4. REPAIR TRACKING LOGIC (NEW) 🌟 ===
+const trackModal = document.getElementById("trackModal");
+const openTrackModalBtn = document.getElementById("openTrackModalBtn");
+const closeTrackBtn = document.querySelector(".close-track-btn");
+const btnTrackStatus = document.getElementById("btnTrackStatus");
+const trackIdInput = document.getElementById("trackIdInput");
+const trackPhoneInput = document.getElementById("trackPhoneInput");
+const trackResultSection = document.getElementById("trackResultSection");
+const trackLiveStatus = document.getElementById("trackLiveStatus");
+const trackDeviceName = document.getElementById("trackDeviceName");
+const trackErrorMsg = document.getElementById("trackErrorMsg");
+
+// Open Tracking Modal
+openTrackModalBtn.addEventListener("click", () => {
+    trackModal.style.display = "block";
+    trackResultSection.style.display = "none";
+    trackErrorMsg.style.display = "none";
+    trackIdInput.value = "";
+    trackPhoneInput.value = "";
+});
+
+// Close Tracking Modal
+closeTrackBtn.addEventListener("click", () => trackModal.style.display = "none");
+window.addEventListener("click", (e) => { if (e.target === trackModal) trackModal.style.display = "none"; });
+
+// Handle Check Status Button
+btnTrackStatus.addEventListener("click", async () => {
+    const trackId = trackIdInput.value.trim().toUpperCase();
+    const phone = trackPhoneInput.value.trim();
+
+    if(!trackId || !phone) {
+        trackErrorMsg.innerText = "⚠️ Please enter both Tracking ID and Mobile Number.";
+        trackErrorMsg.style.display = "block";
+        trackResultSection.style.display = "none";
+        return;
+    }
+
+    btnTrackStatus.innerText = "Searching... ⏳";
+    btnTrackStatus.disabled = true;
+    trackErrorMsg.style.display = "none";
+
+    try {
+        // Query Database (Match ID and Phone together for security)
+        const q = query(collection(db, "repairs"), where("trackingId", "==", trackId), where("phone", "==", phone));
+        const querySnapshot = await getDocs(q);
+
+        if(querySnapshot.empty) {
+            trackErrorMsg.innerText = "❌ No repair found! Please check your ID and Mobile Number.";
+            trackErrorMsg.style.display = "block";
+            trackResultSection.style.display = "none";
+        } else {
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                trackDeviceName.innerText = data.device;
+                trackLiveStatus.innerText = data.status;
+                
+                // Color coding based on status
+                if (data.status === "Ready for Pickup" || data.status === "Delivered") {
+                    trackLiveStatus.style.color = "#16a34a"; // Green
+                } else if (data.status === "Waiting for Parts") {
+                    trackLiveStatus.style.color = "#ea580c"; // Orange
+                } else {
+                    trackLiveStatus.style.color = "#2563eb"; // Blue
+                }
+            });
+            trackResultSection.style.display = "block";
+        }
+    } catch (error) {
+        console.error("Error finding repair:", error);
+        trackErrorMsg.innerText = "❌ Network error! Could not fetch details.";
+        trackErrorMsg.style.display = "block";
+    } finally {
+        btnTrackStatus.innerText = "Check Status";
+        btnTrackStatus.disabled = false;
+    }
+});
+                             
