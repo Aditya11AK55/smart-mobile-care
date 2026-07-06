@@ -29,6 +29,25 @@ async function loadLiveOffer() {
 loadLiveOffer(); // पेज खुलते ही ऑफर लोड करें
 
 
+// === 0.1 LIVE SHOP CLOSURE FETCH (दुकान बंद है या नहीं, चेक करना) ===
+async function loadShopStatus() {
+    try {
+        const snap = await getDoc(doc(db, "settings", "shop_status"));
+        const banner = document.getElementById("shopClosureBanner");
+        if (snap.exists() && snap.data().isClosed && banner) {
+            const data = snap.data();
+            banner.style.display = "block";
+            document.getElementById("closureMessage").innerText = `We are closed from ${data.startDate} to ${data.endDate}. ${data.reason ? '(' + data.reason + ')' : ''}`;
+        } else if (banner) {
+            banner.style.display = "none";
+        }
+    } catch (error) {
+        console.error("Error loading shop status:", error);
+    }
+}
+loadShopStatus(); // पेज खुलते ही चेक करेगा
+
+
 // === 1. Dynamic Data for Mobile Brands & Models ===
 const mobileModels = {
     "Oppo": ["Reno 10 Pro", "Reno 8", "F23 5G", "F21s Pro", "A78 5G"],
@@ -224,4 +243,4 @@ window.buyProduct = function(productName, productPrice) {
     const message = `Hello, I want to buy an accessory from your website.\n\n*Product:* ${productName}\n*Price:* ${productPrice}\n\nPlease let me know how to proceed with the payment and delivery.`;
     window.open(`https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
 };
-    
+                              
