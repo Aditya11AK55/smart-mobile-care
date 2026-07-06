@@ -27,7 +27,7 @@
                 <div class="stat-icon" style="background-color: #dbeafe; color: #2563eb;">💬</div>
                 <div class="stat-details">
                     <h3>Today's Enquiries</h3>
-                    <p class="stat-number">12</p>
+                    <p class="stat-number" id="statEnquiries">0</p>
                 </div>
             </div>
 
@@ -35,7 +35,7 @@
                 <div class="stat-icon" style="background-color: #fef08a; color: #ca8a04;">⏳</div>
                 <div class="stat-details">
                     <h3>Pending 'Notify Me'</h3>
-                    <p class="stat-number">5</p>
+                    <p class="stat-number" id="statNotify">0</p>
                 </div>
             </div>
 
@@ -43,15 +43,31 @@
                 <div class="stat-icon" style="background-color: #dcfce7; color: #16a34a;">📦</div>
                 <div class="stat-details">
                     <h3>Total Products</h3>
-                    <p class="stat-number">24</p>
+                    <p class="stat-number" id="statProducts">0</p>
                 </div>
             </div>
+        </div>
+        
+        <div class="admin-section">
+            <h3 class="section-title">🛑 Shop Holiday / Closure Notice</h3>
+            <p style="margin-bottom: 15px; color: #64748b; font-size: 14px;">Set dates when the shop will be closed. A red alert banner will appear on the customer website.</p>
+            
+            <div class="form-grid">
+                <input type="date" id="closeStartDate" class="admin-input" title="Start Date">
+                <input type="date" id="closeEndDate" class="admin-input" title="End Date">
+                <input type="text" id="closeReason" class="admin-input" placeholder="Reason (e.g., Festival Holiday, Emergency)">
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button class="btn-delete" id="btnSetClosed" style="width: auto; background-color: #ef4444;">Set Shop Closed</button>
+                <button class="btn-add" id="btnSetOpen" style="width: auto; background-color: #10b981;">Remove Notice (Set Open)</button>
+            </div>
+            <p id="closureStatusMsg" style="margin-top: 15px; font-weight: bold;"></p>
         </div>
 
         <div class="admin-section">
             <h3 class="section-title">📢 Update Today's Offer (Marquee)</h3>
             <div class="offer-manager-box">
-                <input type="text" id="offerInput" placeholder="Type new offer text here (e.g., Get 20% off on Earbuds!)..." value="🎉 TODAY'S SPECIAL OFFER: Get up to ₹299 OFF on any new Premium Neckband! 🔥">
+                <input type="text" id="offerInput" placeholder="Type new offer text here (e.g., Get 20% off on Earbuds!)...">
                 <button class="btn-update" id="btnUpdateOffer">Update Offer</button>
             </div>
             <p class="success-msg" id="offerSuccessMsg" style="display: none;">✅ Offer updated successfully on customer website!</p>
@@ -68,10 +84,11 @@
                         <option value="Neckbands">Neckbands</option>
                         <option value="Wired Earphones">Wired Earphones</option>
                         <option value="Bluetooth Speakers">Bluetooth Speakers</option>
+                        <option value="Other Accessories">📦 Other Accessories & Parts (Chargers, Folders, etc.)</option>
                     </select>
-                    <input type="text" id="productName" class="admin-input" placeholder="Product Name (e.g., AirPods Pro)">
-                    <input type="text" id="productPrice" class="admin-input" placeholder="Price (e.g., ₹1999)">
-                    <input type="text" id="productFeatures" class="admin-input" placeholder="Features (e.g., Noise Cancellation)">
+                    <input type="text" id="productName" class="admin-input" placeholder="Product Name (e.g., 25W Charger)">
+                    <input type="text" id="productPrice" class="admin-input" placeholder="Price (e.g., ₹499)">
+                    <input type="text" id="productFeatures" class="admin-input" placeholder="Features (e.g., Fast Charging)">
                     <button class="btn-add" id="btnAddProduct">Add Product</button>
                 </div>
             </div>
@@ -88,13 +105,7 @@
                         </tr>
                     </thead>
                     <tbody id="adminProductTableBody">
-                        <tr>
-                            <td>Neckbands</td>
-                            <td>OnePlus Bullets Z2</td>
-                            <td>₹1,999</td>
-                            <td><button class="btn-delete">Delete</button></td>
-                        </tr>
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </div>
