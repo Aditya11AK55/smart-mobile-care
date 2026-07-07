@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Shop - Customer Panel</title>
+    <title>📱Vishal Mobile Repairing Center📱</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,8 +12,9 @@
         ⚠️ NOTICE: <span id="closureMessage"></span>
     </div>
 
-    <header class="main-header">
-        <h1 class="shop-name">My Mobile Shop</h1>
+    <header class="main-header" style="text-align: center; padding: 20px 10px;">
+        <h1 class="shop-name" style="margin-bottom: 5px; font-size: 28px;">Vishal Mobile Repairing Center</h1>
+        <p class="shop-address" style="color: #ffde59; font-size: 16px; font-weight: 500; margin: 0; letter-spacing: 0.5px;">📍 Naya Bazar Pokhari</p>
     </header>
 
     <div class="offer-ticker">
@@ -34,22 +35,67 @@
 
     <section class="services-section">
         <h2 class="section-title">Our Repair Services</h2>
+        
         <div class="services-grid">
-            <div class="service-card"><div class="icon">📱</div><h3>Display Replacement</h3><p>Broken screen or combo? Get it fixed quickly.</p></div>
-            <div class="service-card"><div class="icon">⚙️</div><h3>Motherboard & Hardware</h3><p>Dead mobile recovery and internal parts repair.</p></div>
-            <div class="service-card"><div class="icon">💻</div><h3>Software & Unlocking</h3><p>FRP bypass, flashing, and software optimization.</p></div>
-            <div class="service-card"><div class="icon">🛡️</div><h3>Tempered Glass & More</h3><p>Screen protection and other miscellaneous repairs.</p></div>
+            <div class="service-card">
+                <div class="icon">📱</div>
+                <h3>Display Replacement</h3>
+                <p>Broken screen or combo? Get it fixed quickly with genuine parts.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">⚙️</div>
+                <h3>Motherboard & Hardware</h3>
+                <p>Dead mobile recovery and advanced internal parts repair.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">💻</div>
+                <h3>Software & Unlocking</h3>
+                <p>FRP bypass, flashing, and software optimization.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">🛡️</div>
+                <h3>Tempered Glass & More</h3>
+                <p>Screen protection and other miscellaneous repairs.</p>
+            </div>
         </div>
     </section>
     
     <section class="shopping-section">
         <h2 class="section-title">Shop Premium Accessories & Parts</h2>
+        
         <div class="shopping-grid">
-            <div class="shop-card"><div class="icon">🎧</div><h3>Wireless Earbuds</h3><p>Top quality TWS with heavy bass</p></div>
-            <div class="shop-card"><div class="icon">🔌</div><h3>Neckbands</h3><p>Long battery life and durable</p></div>
-            <div class="shop-card"><div class="icon">🎧</div><h3>Wired Earphones</h3><p>Classic earphones with mic</p></div>
-            <div class="shop-card"><div class="icon">🔊</div><h3>Bluetooth Speakers</h3><p>Portable and powerful sound</p></div>
-            <div class="shop-card"><div class="icon">📦</div><h3>Other Accessories</h3><p>Chargers, Covers, Folders & Spare Parts</p></div>
+            <div class="shop-card">
+                <div class="icon">🎧</div>
+                <h3>Wireless Earbuds</h3>
+                <p>Top quality TWS with heavy bass</p>
+            </div>
+
+            <div class="shop-card">
+                <div class="icon">🔌</div>
+                <h3>Neckbands</h3>
+                <p>Long battery life and durable</p>
+            </div>
+
+            <div class="shop-card">
+                <div class="icon">🎧</div>
+                <h3>Wired Earphones</h3>
+                <p>Classic earphones with mic</p>
+            </div>
+
+            <div class="shop-card">
+                <div class="icon">🔊</div>
+                <h3>Bluetooth Speakers</h3>
+                <p>Portable and powerful sound</p>
+            </div>
+            
+            <div class="shop-card">
+                <div class="icon">📦</div>
+                <h3>Other Accessories</h3>
+                <p>Chargers, Covers, Folders & Spare Parts</p>
+            </div>
         </div>
     </section>
 
@@ -57,15 +103,54 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2 id="modalTitle">Book Repair Service</h2>
-            <div class="form-group"><label>Select Mobile Brand:</label><select id="brandSelect"><option value="">-- Choose Brand --</option><option value="Oppo">Oppo</option><option value="Vivo">Vivo</option><option value="Realme">Realme</option><option value="Xiaomi">Xiaomi</option><option value="Samsung">Samsung</option><option value="Apple">Apple</option><option value="Other">Other</option></select></div>
-            <div class="form-group"><label>Select Model:</label><select id="modelSelect"><option value="">-- Choose Model --</option><option value="Other">Other</option></select></div>
-            <div class="form-group" id="otherDeviceGroup" style="display: none;"><label>Enter Device Name Manually:</label><input type="text" id="otherDeviceInput" placeholder="E.g., OnePlus Nord 2"></div>
-            <div class="form-group"><label>Device Condition / Issue:</label><textarea id="deviceCondition" rows="3" placeholder="E.g., Screen is completely broken..."></textarea></div>
+            
+            <div class="form-group">
+                <label>Select Mobile Brand:</label>
+                <select id="brandSelect">
+                    <option value="">-- Choose Brand --</option>
+                    <option value="Oppo">Oppo</option>
+                    <option value="Vivo">Vivo</option>
+                    <option value="Realme">Realme</option>
+                    <option value="Xiaomi">Xiaomi</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Select Model:</label>
+                <select id="modelSelect">
+                    <option value="">-- Choose Model --</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="otherDeviceGroup" style="display: none;">
+                <label>Enter Device Name Manually:</label>
+                <input type="text" id="otherDeviceInput" placeholder="E.g., OnePlus Nord 2">
+            </div>
+
+            <div class="form-group">
+                <label>Device Condition / Issue:</label>
+                <textarea id="deviceCondition" rows="3" placeholder="E.g., Screen is completely broken, phone fell in water..."></textarea>
+            </div>
+
             <button id="checkAvailabilityBtn" class="btn-check">Check Part Availability</button>
+
             <div id="resultSection" style="display: none;">
                 <p id="resultMessage" class="result-message"></p>
-                <div class="form-group"><label>Full Name <span class="required">*</span></label><input type="text" id="customerName" placeholder="Enter your full name"></div>
-                <div class="form-group"><label>WhatsApp Number <span class="required">*</span></label><input type="tel" id="customerPhone" placeholder="Enter 10-digit number"></div>
+                
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="customerName" placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label>WhatsApp Number <span class="required">*</span></label>
+                    <input type="tel" id="customerPhone" placeholder="Enter 10-digit number">
+                </div>
+
                 <button id="actionBtn" class="btn-whatsapp">Send Details on WhatsApp</button>
             </div>
         </div>
@@ -75,7 +160,9 @@
         <div class="modal-content shopping-modal-content">
             <span class="close-shop-btn">&times;</span>
             <h2 id="shoppingModalTitle">Available Products</h2>
-            <div id="productList" class="product-list-container"></div>
+            
+            <div id="productList" class="product-list-container">
+            </div>
         </div>
     </div>
 
@@ -110,5 +197,7 @@
     </div>
     
     <script type="module" src="script.js"></script>
+    
 </body>
-</html>
+                </html>
+                
