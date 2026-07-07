@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- Top Master Navigation -->
     <nav class="super-nav">
         <div class="nav-brand">👑 SUPER ADMIN PORTAL</div>
         <a href="index.html" class="btn-logout-super">System Logout</a>
@@ -21,99 +20,59 @@
             <p>Monitor and manage all shop admins, global settings, and total system statistics.</p>
         </div>
 
-        <!-- Master Statistics -->
         <div class="super-stats-grid">
-            <div class="super-card">
-                <h3>Total Shop Admins</h3>
-                <p class="super-number">1</p>
-            </div>
-            <div class="super-card">
-                <h3>Total Registered Products</h3>
-                <p class="super-number">24</p>
-            </div>
-            <div class="super-card">
-                <h3>System Server Status</h3>
-                <p class="super-number" style="color: #10b981; font-size: 26px;">Online ✅</p>
-            </div>
+            <div class="super-card"><h3>Total Shop Admins</h3><p class="super-number">1</p></div>
+            <div class="super-card"><h3>Total Registered Products</h3><p class="super-number">24</p></div>
+            <div class="super-card"><h3>System Server Status</h3><p class="super-number" style="color: #10b981; font-size: 26px;">Online ✅</p></div>
         </div>
 
-        <!-- Admin Management Section -->
         <div class="super-section">
             <h3>👥 Manage Shop Admins</h3>
-            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend (block) or permanently delete shop owners.</p>
-            
-            <!-- 🔥 टेबल को बाहर जाने से रोकने के लिए नया DIV जोड़ा गया है 🔥 -->
             <div style="overflow-x: auto; width: 100%; white-space: nowrap;">
                 <table class="super-table">
-                    <thead>
-                        <tr>
-                            <th>Admin Username</th>
-                            <th>Mobile Number</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="masterAdminTableBody">
-                        <tr>
-                            <td>Shop Owner 1 (Main)</td>
-                            <td>9876543210</td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <button class="btn-block">Block</button>
-                                <button class="btn-delete-super">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <thead><tr><th>Admin Username</th><th>Mobile Number</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="masterAdminTableBody"></tbody>
                 </table>
             </div>
         </div>
         
-        <!-- Customer Management Section -->
         <div class="super-section">
             <h3>👤 Manage Customers</h3>
-            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Here you can suspend (block) or permanently delete registered customers.</p>
-            
-            <!-- 🔥 टेबल को बाहर जाने से रोकने के लिए नया DIV जोड़ा गया है 🔥 -->
             <div style="overflow-x: auto; width: 100%; white-space: nowrap;">
                 <table class="super-table">
-                    <thead>
-                        <tr>
-                            <th>Customer Name</th>
-                            <th>Mobile Number</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="masterCustomerTableBody">
-                        <tr>
-                            <td>Rahul Kumar</td>
-                            <td>9123456789</td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <button class="btn-block">Block</button>
-                                <button class="btn-delete-super">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <thead><tr><th>Customer Name</th><th>Mobile Number</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="masterCustomerTableBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Security Key Generator Section -->
         <div class="super-section">
-            <h3>🔑 Generate Admin Security Key</h3>
-            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Generate a unique secret code to give to new shop owners for registration.</p>
+            <h3>🔑 Generate & Manage Security Keys</h3>
+            <p style="color: #888; font-size: 14px; margin-bottom: 15px;">Generate secret codes for new shop owners, and manage existing unused keys to prevent unauthorized access.</p>
             
-            <div style="display: flex; gap: 15px; align-items: center;">
+            <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 25px;">
                 <input type="text" id="generatedKey" readonly placeholder="XXXX-XXXX" style="padding: 12px; border-radius: 6px; border: 1px solid #333; background: #000; color: #d4af37; font-weight: bold; font-size: 18px; width: 200px; text-align: center; letter-spacing: 2px;">
                 <button class="btn-super" id="btnGenerateKey" style="width: auto; margin-top: 0; padding: 12px 25px;">Generate Key</button>
             </div>
+
+            <div style="overflow-x: auto; width: 100%; white-space: nowrap; border-top: 1px solid #333; padding-top: 15px;">
+                <h4 style="color: #fff; margin-bottom: 10px;">📋 Generated Keys List</h4>
+                <table class="super-table">
+                    <thead>
+                        <tr>
+                            <th>Security Key</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="keyTableBody">
+                        </tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Global Settings Section -->
         <div class="super-section">
             <h3>⚙️ Global System Settings</h3>
-            
             <div class="setting-item">
                 <div class="setting-text">
                     <h4 style="color: #d4af37; margin-bottom: 5px;">Maintenance Mode</h4>
@@ -128,7 +87,6 @@
 
     </div>
 
-    <!-- 🔥 FIREBASE MODULE UPDATE 🔥 -->
     <script type="module" src="super-dashboard.js"></script>
 </body>
 </html>
