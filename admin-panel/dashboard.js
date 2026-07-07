@@ -1,7 +1,7 @@
 // === 🔥 FIREBASE SETUP 🔥 ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-// Added updateDoc here for status changing
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+// Added query and where here for security check
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc, updateDoc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC0P1T-OxFHBYSWq9m5xHdL-tiDdQXsgsY",
@@ -19,6 +19,36 @@ const loggedInUser = localStorage.getItem("loggedInAdminMobile");
 if (!loggedInUser) {
     window.location.href = "index.html";
 }
+
+// === 🔐 NEW: SECURITY CHECK (SESSION VALIDATION) 🔐 ===
+// यह गार्ड चेक करेगा कि दुकानदार ब्लॉक या डिलीट तो नहीं हो गया
+async function verifyAdminSession() {
+    try {
+        const q = query(collection(db, "shop_admins"), where("mobile", "==", loggedInUser));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            // अगर डेटाबेस में अकाउंट ही नहीं मिला (यानी सुपर एडमिन ने डिलीट कर दिया है)
+            localStorage.removeItem("loggedInAdminMobile");
+            alert("⚠️ Your account has been deleted by the Super Admin.");
+            window.location.href = "index.html";
+            return;
+        }
+
+        querySnapshot.forEach((docSnap) => {
+            const adminData = docSnap.data();
+            if (adminData.status === "Blocked") {
+                // अगर डेटाबेस में स्टेटस 'Blocked' हो गया है
+                localStorage.removeItem("loggedInAdminMobile");
+                alert("🚫 Your account is blocked by the Super Admin.");
+                window.location.href = "index.html";
+            }
+        });
+    } catch (error) {
+        console.error("Session verification failed:", error);
+    }
+}
+verifyAdminSession(); // पेज खुलते ही सबसे पहले यह गार्ड चेकिंग करेगा
 
 
 // === 🌟 NEW: REPAIR TRACKING MANAGEMENT 🌟 ===
@@ -62,28 +92,25 @@ async function loadRepairs() {
             `;
         });
 
-        // Add event listeners to dropdowns to update status instantly
         document.querySelectorAll('.status-dropdown').forEach(dropdown => {
             dropdown.addEventListener('change', async (e) => {
                 const id = e.target.getAttribute('data-id');
                 const newStatus = e.target.value;
                 try {
                     await updateDoc(doc(db, "repairs", id), { status: newStatus });
-                    // Optional: Show a small toast/alert here if you want
                 } catch(err) {
                     alert("❌ Error updating status on cloud!");
                 }
             });
         });
 
-        // Add event listeners to Delete buttons
         document.querySelectorAll('.repair-delete').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 if(confirm("⚠️ Are you sure you want to delete this repair job?")) {
                     const id = e.target.getAttribute('data-id');
                     try {
                         await deleteDoc(doc(db, "repairs", id));
-                        loadRepairs(); // Reload table
+                        loadRepairs(); 
                     } catch(err) {
                         alert("❌ Could not delete.");
                     }
@@ -95,7 +122,7 @@ async function loadRepairs() {
         repairTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error loading data!</td></tr>";
     }
 }
-loadRepairs(); // Load on page open
+loadRepairs(); 
 
 btnAddRepair.addEventListener('click', async () => {
     const name = repairCustName.value.trim();
@@ -107,7 +134,6 @@ btnAddRepair.addEventListener('click', async () => {
         return;
     }
 
-    // Generate random 4-digit code (e.g. REP-8392)
     const randomCode = Math.floor(1000 + Math.random() * 9000);
     const trackingId = "REP-" + randomCode;
 
@@ -121,7 +147,7 @@ btnAddRepair.addEventListener('click', async () => {
             name: name,
             phone: phone,
             device: device,
-            status: "Received", // Default status
+            status: "Received", 
             addedBy: loggedInUser,
             createdAt: serverTimestamp()
         });
@@ -316,3 +342,4 @@ adminProductTableBody.addEventListener('click', async (e) => {
         }
     }
 });
+  
