@@ -40,14 +40,44 @@ async function loadShopStatus() {
 }
 loadShopStatus();
 
-// === 1. Dynamic Data for Mobile Brands & Models ===
+// === 1. 🌟 TOP 20 DYNAMIC MODELS FOR EACH BRAND 🌟 ===
 const mobileModels = {
-    "Oppo": ["Reno 10 Pro", "Reno 8", "F23 5G", "F21s Pro", "A78 5G"],
-    "Vivo": ["V29 Pro", "V27", "T2x 5G", "Y100", "X90 Pro"],
-    "Realme": ["11 Pro+", "10 Pro", "C55", "Narzo N53", "GT Neo 3"],
-    "Xiaomi": ["Redmi Note 12 Pro", "Redmi 12 5G", "Poco X5", "Xiaomi 13 Pro"],
-    "Samsung": ["Galaxy S23 Ultra", "Galaxy A54", "Galaxy M34", "Galaxy Z Fold 5"],
-    "Apple": ["iPhone 15 Pro", "iPhone 14", "iPhone 13", "iPhone 12"]
+    "Oppo": [
+        "Reno 11 Pro 5G", "Reno 11 5G", "Reno 10 Pro+ 5G", "Reno 10 Pro 5G", "Reno 10 5G", 
+        "Reno 8 Pro 5G", "Reno 8 5G", "F25 Pro 5G", "F23 5G", "F21s Pro", 
+        "F21 Pro 5G", "F19 Pro+", "A79 5G", "A78 5G", "A59 5G", 
+        "A58", "A38", "A18", "Find N3 Flip", "Find X5 Pro"
+    ],
+    "Vivo": [
+        "X100 Pro", "X100", "X90 Pro", "X90", "V30 Pro", 
+        "V30", "V29 Pro", "V29", "V29e", "V27 Pro", 
+        "V27", "T2 Pro 5G", "T2x 5G", "T2 5G", "Y200e 5G", 
+        "Y200 5G", "Y100", "Y56 5G", "Y28 5G", "Y16"
+    ],
+    "Realme": [
+        "12 Pro+ 5G", "12 Pro 5G", "12 5G", "11 Pro+ 5G", "11 Pro 5G", 
+        "11x 5G", "11 5G", "10 Pro+ 5G", "10 Pro 5G", "GT Neo 3", 
+        "GT 2 Pro", "Narzo 60x 5G", "Narzo 60 Pro", "Narzo 60", "Narzo N55", 
+        "Narzo N53", "C67 5G", "C55", "C53", "C51"
+    ],
+    "Xiaomi": [
+        "Xiaomi 14", "Xiaomi 13 Pro", "Redmi Note 13 Pro+", "Redmi Note 13 Pro", "Redmi Note 13 5G", 
+        "Redmi Note 12 Pro+", "Redmi Note 12 Pro", "Redmi Note 12 5G", "Redmi 13C 5G", "Redmi 13C", 
+        "Redmi 12 5G", "Redmi 12", "Poco X6 Pro", "Poco X6", "Poco M6 Pro 5G", 
+        "Poco C65", "Poco F5 5G", "Xiaomi 12 Pro", "Xiaomi 11T Pro", "Xiaomi Pad 6"
+    ],
+    "Samsung": [
+        "Galaxy S24 Ultra", "Galaxy S24+", "Galaxy S24", "Galaxy S23 Ultra", "Galaxy S23 FE", 
+        "Galaxy S23", "Galaxy Z Fold 5", "Galaxy Z Flip 5", "Galaxy A54 5G", "Galaxy A34 5G", 
+        "Galaxy A25 5G", "Galaxy A15 5G", "Galaxy M34 5G", "Galaxy M14 5G", "Galaxy F54 5G", 
+        "Galaxy F34 5G", "Galaxy S22 Ultra", "Galaxy S21 FE", "Galaxy A14 5G", "Galaxy M04"
+    ],
+    "Apple": [
+        "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15", "iPhone 14 Pro Max", 
+        "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14", "iPhone 13 Pro Max", "iPhone 13 Pro", 
+        "iPhone 13", "iPhone 13 mini", "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", 
+        "iPhone 12 mini", "iPhone 11", "iPhone SE (3rd Gen)", "iPhone XR", "iPhone XS"
+    ]
 };
 
 // === 2. Repair Booking Logic ===
@@ -134,7 +164,7 @@ actionBtn.addEventListener("click", () => {
     if (!deviceName || !customerName || !customerPhone) { alert("Please fill all required fields!"); return; }
 
     if (isPartAvailable) {
-        const shopOwnerWhatsAppNumber = "919876543210"; 
+        const shopOwnerWhatsAppNumber = "919876543210"; // <--- अपना WhatsApp नंबर यहाँ डालें
         const message = `Hello, I need a repair service.\n\n*Service:* ${currentService}\n*Device:* ${brandSelect.value} ${deviceName}\n*Condition:* ${condition}\n*My Name:* ${customerName}\n*My Number:* ${customerPhone}\n\nPlease let me know the cost.`;
         window.open(`https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
     } else {
@@ -142,7 +172,6 @@ actionBtn.addEventListener("click", () => {
         modal.style.display = "none";
     }
 });
-
 
 // === 3. LIVE SHOPPING SECTION ===
 const shoppingModal = document.getElementById("shoppingModal");
@@ -206,13 +235,13 @@ closeShopBtn.addEventListener("click", () => shoppingModal.style.display = "none
 window.addEventListener("click", (e) => { if (e.target === shoppingModal) shoppingModal.style.display = "none"; });
 
 window.buyProduct = function(productName, productPrice) {
-    const shopOwnerWhatsAppNumber = "919876543210"; 
+    const shopOwnerWhatsAppNumber = "919876543210"; // <--- अपना WhatsApp नंबर यहाँ डालें
     const message = `Hello, I want to buy an accessory from your website.\n\n*Product:* ${productName}\n*Price:* ${productPrice}\n\nPlease let me know how to proceed with the payment and delivery.`;
     window.open(`https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
 };
 
 
-// === 🌟 4. REPAIR TRACKING LOGIC (NEW) 🌟 ===
+// === 🌟 4. REPAIR TRACKING LOGIC 🌟 ===
 const trackModal = document.getElementById("trackModal");
 const openTrackModalBtn = document.getElementById("openTrackModalBtn");
 const closeTrackBtn = document.querySelector(".close-track-btn");
@@ -224,68 +253,70 @@ const trackLiveStatus = document.getElementById("trackLiveStatus");
 const trackDeviceName = document.getElementById("trackDeviceName");
 const trackErrorMsg = document.getElementById("trackErrorMsg");
 
-// Open Tracking Modal
-openTrackModalBtn.addEventListener("click", () => {
-    trackModal.style.display = "block";
-    trackResultSection.style.display = "none";
-    trackErrorMsg.style.display = "none";
-    trackIdInput.value = "";
-    trackPhoneInput.value = "";
-});
+if(openTrackModalBtn) {
+    openTrackModalBtn.addEventListener("click", () => {
+        trackModal.style.display = "block";
+        trackResultSection.style.display = "none";
+        trackErrorMsg.style.display = "none";
+        trackIdInput.value = "";
+        trackPhoneInput.value = "";
+    });
+}
 
-// Close Tracking Modal
-closeTrackBtn.addEventListener("click", () => trackModal.style.display = "none");
+if(closeTrackBtn) {
+    closeTrackBtn.addEventListener("click", () => trackModal.style.display = "none");
+}
+
 window.addEventListener("click", (e) => { if (e.target === trackModal) trackModal.style.display = "none"; });
 
-// Handle Check Status Button
-btnTrackStatus.addEventListener("click", async () => {
-    const trackId = trackIdInput.value.trim().toUpperCase();
-    const phone = trackPhoneInput.value.trim();
+if(btnTrackStatus) {
+    btnTrackStatus.addEventListener("click", async () => {
+        const trackId = trackIdInput.value.trim().toUpperCase();
+        const phone = trackPhoneInput.value.trim();
 
-    if(!trackId || !phone) {
-        trackErrorMsg.innerText = "⚠️ Please enter both Tracking ID and Mobile Number.";
-        trackErrorMsg.style.display = "block";
-        trackResultSection.style.display = "none";
-        return;
-    }
-
-    btnTrackStatus.innerText = "Searching... ⏳";
-    btnTrackStatus.disabled = true;
-    trackErrorMsg.style.display = "none";
-
-    try {
-        // Query Database (Match ID and Phone together for security)
-        const q = query(collection(db, "repairs"), where("trackingId", "==", trackId), where("phone", "==", phone));
-        const querySnapshot = await getDocs(q);
-
-        if(querySnapshot.empty) {
-            trackErrorMsg.innerText = "❌ No repair found! Please check your ID and Mobile Number.";
+        if(!trackId || !phone) {
+            trackErrorMsg.innerText = "⚠️ Please enter both Tracking ID and Mobile Number.";
             trackErrorMsg.style.display = "block";
             trackResultSection.style.display = "none";
-        } else {
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                trackDeviceName.innerText = data.device;
-                trackLiveStatus.innerText = data.status;
-                
-                // Color coding based on status
-                if (data.status === "Ready for Pickup" || data.status === "Delivered") {
-                    trackLiveStatus.style.color = "#16a34a"; // Green
-                } else if (data.status === "Waiting for Parts") {
-                    trackLiveStatus.style.color = "#ea580c"; // Orange
-                } else {
-                    trackLiveStatus.style.color = "#2563eb"; // Blue
-                }
-            });
-            trackResultSection.style.display = "block";
+            return;
         }
-    } catch (error) {
-        console.error("Error finding repair:", error);
-        trackErrorMsg.innerText = "❌ Network error! Could not fetch details.";
-        trackErrorMsg.style.display = "block";
-    } finally {
-        btnTrackStatus.innerText = "Check Status";
-        btnTrackStatus.disabled = false;
-    }
-});
-                             
+
+        btnTrackStatus.innerText = "Searching... ⏳";
+        btnTrackStatus.disabled = true;
+        trackErrorMsg.style.display = "none";
+
+        try {
+            const q = query(collection(db, "repairs"), where("trackingId", "==", trackId), where("phone", "==", phone));
+            const querySnapshot = await getDocs(q);
+
+            if(querySnapshot.empty) {
+                trackErrorMsg.innerText = "❌ No repair found! Please check your ID and Mobile Number.";
+                trackErrorMsg.style.display = "block";
+                trackResultSection.style.display = "none";
+            } else {
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    trackDeviceName.innerText = data.device;
+                    trackLiveStatus.innerText = data.status;
+                    
+                    if (data.status === "Ready for Pickup" || data.status === "Delivered") {
+                        trackLiveStatus.style.color = "#16a34a"; // Green
+                    } else if (data.status === "Waiting for Parts") {
+                        trackLiveStatus.style.color = "#ea580c"; // Orange
+                    } else {
+                        trackLiveStatus.style.color = "#2563eb"; // Blue
+                    }
+                });
+                trackResultSection.style.display = "block";
+            }
+        } catch (error) {
+            console.error("Error finding repair:", error);
+            trackErrorMsg.innerText = "❌ Network error! Could not fetch details.";
+            trackErrorMsg.style.display = "block";
+        } finally {
+            btnTrackStatus.innerText = "Check Status";
+            btnTrackStatus.disabled = false;
+        }
+    });
+          }
+          
