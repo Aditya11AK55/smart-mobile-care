@@ -1,4 +1,4 @@
-// === 🔥 FIREBASE SETUP (आपका जादुई क्लाउड कनेक्शन) 🔥 ===
+// === 🔥 FIREBASE SETUP 🔥 ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -14,161 +14,179 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// === 1. FETCH & DISPLAY SHOP ADMINS (असली डेटाबेस से लाना) ===
+// === 1. FETCH & DISPLAY SHOP ADMINS ===
 const masterAdminTableBody = document.getElementById('masterAdminTableBody');
-
 async function loadShopAdmins() {
     masterAdminTableBody.innerHTML = "<tr><td colspan='4'>Loading from Database... ⏳</td></tr>";
     try {
         const snapshot = await getDocs(collection(db, "shop_admins"));
-        masterAdminTableBody.innerHTML = ""; // पुराने डमी डेटा को साफ़ कर देगा
-
+        masterAdminTableBody.innerHTML = ""; 
         if(snapshot.empty) {
             masterAdminTableBody.innerHTML = "<tr><td colspan='4' style='text-align:center; color:#888;'>No Shop Admins Registered Yet.</td></tr>";
             return;
         }
-
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
-            const adminId = docSnap.id;
-            
-            // ब्लॉक/एक्टिव का लॉजिक
             const statusText = data.status || "Active";
             const statusClass = statusText === "Blocked" ? "status-blocked" : "status-active";
             const btnText = statusText === "Blocked" ? "Unblock" : "Block";
-            const btnColor = statusText === "Blocked" ? "#10b981" : "#ef4444"; // हरा या लाल
-
+            const btnColor = statusText === "Blocked" ? "#10b981" : "#ef4444";
             masterAdminTableBody.innerHTML += `
                 <tr>
                     <td>Shop Owner</td>
                     <td>${data.mobile}</td>
                     <td><span class="${statusClass}">${statusText}</span></td>
                     <td>
-                        <button class="btn-block" data-id="${adminId}" data-type="shop_admins" style="background-color: ${btnColor}">${btnText}</button>
-                        <button class="btn-delete-super" data-id="${adminId}" data-type="shop_admins">Delete</button>
+                        <button class="btn-block" data-id="${docSnap.id}" data-type="shop_admins" style="background-color: ${btnColor}">${btnText}</button>
+                        <button class="btn-delete-super" data-id="${docSnap.id}" data-type="shop_admins">Delete</button>
                     </td>
-                </tr>
-            `;
+                </tr>`;
         });
-    } catch (error) {
-        console.error("Error loading admins:", error);
-        masterAdminTableBody.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data!</td></tr>";
-    }
+    } catch (error) { masterAdminTableBody.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data!</td></tr>"; }
 }
 
-
-// === 2. FETCH & DISPLAY CUSTOMERS (असली डेटाबेस से लाना) ===
+// === 2. FETCH & DISPLAY CUSTOMERS ===
 const masterCustomerTableBody = document.getElementById('masterCustomerTableBody');
-
 async function loadCustomers() {
     masterCustomerTableBody.innerHTML = "<tr><td colspan='4'>Loading from Database... ⏳</td></tr>";
     try {
-        // (भविष्य में जब कस्टमर्स का डेटाबेस बनेगा, तो यह वहाँ से लाएगा)
         const snapshot = await getDocs(collection(db, "customers"));
         masterCustomerTableBody.innerHTML = ""; 
-
         if(snapshot.empty) {
             masterCustomerTableBody.innerHTML = "<tr><td colspan='4' style='text-align:center; color:#888;'>No Customers Registered Yet.</td></tr>";
             return;
         }
-
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
-            const customerId = docSnap.id;
-            
             const statusText = data.status || "Active";
             const statusClass = statusText === "Blocked" ? "status-blocked" : "status-active";
             const btnText = statusText === "Blocked" ? "Unblock" : "Block";
             const btnColor = statusText === "Blocked" ? "#10b981" : "#ef4444";
-
             masterCustomerTableBody.innerHTML += `
                 <tr>
                     <td>${data.name || "Customer"}</td>
                     <td>${data.phone}</td>
                     <td><span class="${statusClass}">${statusText}</span></td>
                     <td>
-                        <button class="btn-block" data-id="${customerId}" data-type="customers" style="background-color: ${btnColor}">${btnText}</button>
-                        <button class="btn-delete-super" data-id="${customerId}" data-type="customers">Delete</button>
+                        <button class="btn-block" data-id="${docSnap.id}" data-type="customers" style="background-color: ${btnColor}">${btnText}</button>
+                        <button class="btn-delete-super" data-id="${docSnap.id}" data-type="customers">Delete</button>
                     </td>
-                </tr>
-            `;
+                </tr>`;
         });
-    } catch (error) {
-        console.error("Error loading customers:", error);
-        masterCustomerTableBody.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data!</td></tr>";
-    }
+    } catch (error) { masterCustomerTableBody.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data!</td></tr>"; }
 }
 
-// पेज लोड होते ही दोनों फंक्शन चलाएं
 loadShopAdmins();
 loadCustomers();
 
-
-// === 3. BLOCK & DELETE LOGIC (सीधा डेटाबेस में बदलाव) ===
+// === 3. BLOCK & DELETE LOGIC (Admins & Customers) ===
 async function handleActionClick(e) {
     const target = e.target;
-    
-    // चेक करें कि बटन के अंदर ID है या नहीं
     if (!target.dataset.id) return; 
-
     const docId = target.dataset.id;
-    const collectionName = target.dataset.type; // 'shop_admins' या 'customers'
+    const collectionName = target.dataset.type;
 
-    // --- DELETE LOGIC ---
-    if (target.classList.contains('btn-delete-super')) {
-        if(confirm("⚠️ WARNING: Are you sure you want to permanently DELETE this user from the Database? This cannot be undone.")) {
-            target.innerText = "Deleting...";
-            target.disabled = true;
+    if (target.classList.contains('btn-delete-super') && !target.classList.contains('btn-delete-key')) {
+        if(confirm("⚠️ WARNING: Are you sure you want to permanently DELETE this user?")) {
+            target.innerText = "Deleting..."; target.disabled = true;
             try {
-                await deleteDoc(doc(db, collectionName, docId)); // Firebase से उड़ा दिया
-                target.closest('tr').remove(); // स्क्रीन से भी हटा दिया
-                alert("✅ User deleted permanently from database.");
+                await deleteDoc(doc(db, collectionName, docId));
+                target.closest('tr').remove();
             } catch(err) {
-                console.error(err);
-                alert("❌ Error deleting user.");
-                target.innerText = "Delete";
-                target.disabled = false;
+                alert("❌ Error deleting."); target.innerText = "Delete"; target.disabled = false;
             }
         }
     }
 
-    // --- BLOCK / UNBLOCK LOGIC ---
     if (target.classList.contains('btn-block')) {
         const isBlocking = target.innerText === "Block";
         const newStatus = isBlocking ? "Blocked" : "Active";
-        
         if(confirm(`Are you sure you want to ${isBlocking ? "BLOCK" : "UNBLOCK"} this user?`)) {
-            target.innerText = "Updating...";
-            target.disabled = true;
+            target.innerText = "Updating..."; target.disabled = true;
             try {
-                // Firebase में स्टेटस अपडेट कर दिया
                 await updateDoc(doc(db, collectionName, docId), { status: newStatus });
-                
-                // UI में बदलाव (रंग और टेक्स्ट)
                 const statusSpan = target.closest('tr').querySelector('span[class^="status-"]');
                 statusSpan.innerText = newStatus;
                 statusSpan.className = newStatus === "Blocked" ? "status-blocked" : "status-active";
                 target.innerText = isBlocking ? "Unblock" : "Block";
                 target.style.backgroundColor = isBlocking ? "#10b981" : "#ef4444";
-            } catch(err) {
-                console.error(err);
-                alert("❌ Error updating status.");
-            } finally {
-                target.disabled = false;
-            }
+            } catch(err) { alert("❌ Error updating."); } 
+            finally { target.disabled = false; }
         }
     }
 }
-
-// दोनों टेबल पर क्लिक लिसनर लगाना
 masterAdminTableBody.addEventListener('click', handleActionClick);
 masterCustomerTableBody.addEventListener('click', handleActionClick);
 
 
-// === 4. SECURITY KEY GENERATOR (पुराना काम करने वाला लॉजिक) ===
+// === 🌟 4. SECURITY KEY MANAGER (NEW) 🌟 ===
 const btnGenerateKey = document.getElementById('btnGenerateKey');
 const generatedKeyInput = document.getElementById('generatedKey');
+const keyTableBody = document.getElementById('keyTableBody');
 
+async function loadSecurityKeys() {
+    if(!keyTableBody) return;
+    keyTableBody.innerHTML = "<tr><td colspan='3'>Loading keys... ⏳</td></tr>";
+    
+    try {
+        const snapshot = await getDocs(collection(db, "security_keys"));
+        keyTableBody.innerHTML = "";
+        
+        if(snapshot.empty) {
+            keyTableBody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:#888;'>No keys generated yet.</td></tr>";
+            return;
+        }
+
+        // Sorting locally (Newest first) to avoid Firebase Index errors
+        let keysArray = [];
+        snapshot.forEach(docSnap => { keysArray.push({ id: docSnap.id, ...docSnap.data() }); });
+        keysArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+        keysArray.forEach(data => {
+            const isUsed = data.isUsed || false;
+            
+            // Status and Button Logic
+            const statusSpan = isUsed 
+                ? `<span style="color: #ef4444; font-weight: bold;">🔴 Used</span>` 
+                : `<span style="color: #10b981; font-weight: bold;">🟢 Unused</span>`;
+                
+            const actionBtn = isUsed 
+                ? `<span style="color: #666; font-size: 13px;">Cannot Delete (In Use)</span>`
+                : `<button class="btn-delete-super btn-delete-key" data-id="${data.id}" style="padding: 6px 12px; font-size:13px;">Delete 🗑️</button>`;
+
+            keyTableBody.innerHTML += `
+                <tr>
+                    <td style="font-family: monospace; font-size: 16px; color: #d4af37;">${data.secretCode}</td>
+                    <td>${statusSpan}</td>
+                    <td>${actionBtn}</td>
+                </tr>
+            `;
+        });
+
+        // Add Event Listener to Delete Buttons
+        document.querySelectorAll('.btn-delete-key').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                if(confirm("⚠️ Are you sure you want to delete this unused key? It will be permanently removed.")) {
+                    const id = e.target.getAttribute('data-id');
+                    e.target.innerText = "Deleting..."; e.target.disabled = true;
+                    try {
+                        await deleteDoc(doc(db, "security_keys", id));
+                        loadSecurityKeys(); // Refresh Table
+                    } catch(err) {
+                        alert("❌ Error deleting key.");
+                        e.target.innerText = "Delete 🗑️"; e.target.disabled = false;
+                    }
+                }
+            });
+        });
+
+    } catch(err) {
+        keyTableBody.innerHTML = "<tr><td colspan='3' style='color:red;'>Error loading keys!</td></tr>";
+    }
+}
+loadSecurityKeys(); // Load keys on startup
+
+// Generate New Key
 if (btnGenerateKey) {
     btnGenerateKey.addEventListener('click', async () => {
         const originalText = btnGenerateKey.innerText;
@@ -191,12 +209,14 @@ if (btnGenerateKey) {
 
             generatedKeyInput.value = formattedKey;
             alert(`✅ Key Saved to Database!\n\nGive this to Shop Owner: ${formattedKey}`);
+            
+            loadSecurityKeys(); // 🔥 Auto Refresh List
         } catch (error) {
-            console.error(error);
             alert("❌ Database Error!");
         } finally {
             btnGenerateKey.innerText = originalText;
             btnGenerateKey.disabled = false;
         }
     });
-                                }
+        }
+      
