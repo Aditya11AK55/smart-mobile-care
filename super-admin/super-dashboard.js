@@ -1,6 +1,7 @@
 // === 🔥 FIREBASE SETUP 🔥 ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+// Added getDoc, query, where for deleting keys automatically
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC0P1T-OxFHBYSWq9m5xHdL-tiDdQXsgsY",
@@ -87,11 +88,35 @@ async function handleActionClick(e) {
     const collectionName = target.dataset.type;
 
     if (target.classList.contains('btn-delete-super') && !target.classList.contains('btn-delete-key')) {
-        if(confirm("⚠️ WARNING: Are you sure you want to permanently DELETE this user?")) {
+        if(confirm("⚠️ WARNING: Are you sure you want to permanently DELETE this user and their associated Security Key?")) {
             target.innerText = "Deleting..."; target.disabled = true;
             try {
+                // 🔥 NEW LOGIC: पहले चेक करें कि कौन सी Key इस्तेमाल हुई थी, और उसे उड़ाएं 🔥
+                if (collectionName === "shop_admins") {
+                    const adminDoc = await getDoc(doc(db, collectionName, docId));
+                    if (adminDoc.exists()) {
+                        const adminData = adminDoc.data();
+                        // जो भी Key यूज़र ने सेव की थी उसे ढूँढें (secretCode या securityKey के नाम से)
+                        const usedKey = adminData.secretCode || adminData.securityKey || adminData.key; 
+                        
+                        if (usedKey) {
+                            const keyQ = query(collection(db, "security_keys"), where("secretCode", "==", usedKey));
+                            const keySnap = await getDocs(keyQ);
+                            keySnap.forEach(async (kDoc) => {
+                                await deleteDoc(doc(db, "security_keys", kDoc.id));
+                            });
+                        }
+                    }
+                }
+
+                // अब एडमिन अकाउंट को उड़ा दें
                 await deleteDoc(doc(db, collectionName, docId));
                 target.closest('tr').remove();
+
+                // की (Key) वाली टेबल को रीफ्रेश कर दें
+                if(typeof loadSecurityKeys === 'function') loadSecurityKeys();
+
+                alert("✅ User and their associated Security Key deleted permanently!");
             } catch(err) {
                 alert("❌ Error deleting."); target.innerText = "Delete"; target.disabled = false;
             }
@@ -119,7 +144,7 @@ masterAdminTableBody.addEventListener('click', handleActionClick);
 masterCustomerTableBody.addEventListener('click', handleActionClick);
 
 
-// === 🌟 4. SECURITY KEY MANAGER (NEW) 🌟 ===
+// === 🌟 4. SECURITY KEY MANAGER 🌟 ===
 const btnGenerateKey = document.getElementById('btnGenerateKey');
 const generatedKeyInput = document.getElementById('generatedKey');
 const keyTableBody = document.getElementById('keyTableBody');
@@ -137,15 +162,13 @@ async function loadSecurityKeys() {
             return;
         }
 
-        // Sorting locally (Newest first) to avoid Firebase Index errors
         let keysArray = [];
         snapshot.forEach(docSnap => { keysArray.push({ id: docSnap.id, ...docSnap.data() }); });
         keysArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
         keysArray.forEach(data => {
             const isUsed = data.isUsed || false;
-            
-            // Status and Button Logic
+                
             const statusSpan = isUsed 
                 ? `<span style="color: #ef4444; font-weight: bold;">🔴 Used</span>` 
                 : `<span style="color: #10b981; font-weight: bold;">🟢 Unused</span>`;
@@ -163,7 +186,6 @@ async function loadSecurityKeys() {
             `;
         });
 
-        // Add Event Listener to Delete Buttons
         document.querySelectorAll('.btn-delete-key').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 if(confirm("⚠️ Are you sure you want to delete this unused key? It will be permanently removed.")) {
@@ -171,7 +193,7 @@ async function loadSecurityKeys() {
                     e.target.innerText = "Deleting..."; e.target.disabled = true;
                     try {
                         await deleteDoc(doc(db, "security_keys", id));
-                        loadSecurityKeys(); // Refresh Table
+                        loadSecurityKeys(); 
                     } catch(err) {
                         alert("❌ Error deleting key.");
                         e.target.innerText = "Delete 🗑️"; e.target.disabled = false;
@@ -184,9 +206,8 @@ async function loadSecurityKeys() {
         keyTableBody.innerHTML = "<tr><td colspan='3' style='color:red;'>Error loading keys!</td></tr>";
     }
 }
-loadSecurityKeys(); // Load keys on startup
+loadSecurityKeys();
 
-// Generate New Key
 if (btnGenerateKey) {
     btnGenerateKey.addEventListener('click', async () => {
         const originalText = btnGenerateKey.innerText;
@@ -210,7 +231,7 @@ if (btnGenerateKey) {
             generatedKeyInput.value = formattedKey;
             alert(`✅ Key Saved to Database!\n\nGive this to Shop Owner: ${formattedKey}`);
             
-            loadSecurityKeys(); // 🔥 Auto Refresh List
+            loadSecurityKeys();
         } catch (error) {
             alert("❌ Database Error!");
         } finally {
@@ -218,5 +239,5 @@ if (btnGenerateKey) {
             btnGenerateKey.disabled = false;
         }
     });
-        }
+                                                    }
       
