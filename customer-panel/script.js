@@ -164,7 +164,7 @@ actionBtn.addEventListener("click", () => {
     if (!deviceName || !customerName || !customerPhone) { alert("Please fill all required fields!"); return; }
 
     if (isPartAvailable) {
-        const shopOwnerWhatsAppNumber = "919678491155"; // <--- अपना WhatsApp नंबर यहाँ डालें
+        const shopOwnerWhatsAppNumber = "918638791699"; // <--- अपना WhatsApp नंबर यहाँ डालें
         const message = `Hello, I need a repair service.\n\n*Service:* ${currentService}\n*Device:* ${brandSelect.value} ${deviceName}\n*Condition:* ${condition}\n*My Name:* ${customerName}\n*My Number:* ${customerPhone}\n\nPlease let me know the cost.`;
         window.open(`https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
     } else {
@@ -235,7 +235,7 @@ closeShopBtn.addEventListener("click", () => shoppingModal.style.display = "none
 window.addEventListener("click", (e) => { if (e.target === shoppingModal) shoppingModal.style.display = "none"; });
 
 window.buyProduct = function(productName, productPrice) {
-    const shopOwnerWhatsAppNumber = "919678491155"; // <--- अपना WhatsApp नंबर यहाँ डालें
+    const shopOwnerWhatsAppNumber = "918638791699"; // <--- अपना WhatsApp नंबर यहाँ डालें
     const message = `Hello, I want to buy an accessory from your website.\n\n*Product:* ${productName}\n*Price:* ${productPrice}\n\nPlease let me know how to proceed with the payment and delivery.`;
     window.open(`https://wa.me/${shopOwnerWhatsAppNumber}?text=${encodeURIComponent(message)}`, "_blank");
 };
