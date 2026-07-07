@@ -1,6 +1,5 @@
 // === 🔥 FIREBASE SETUP 🔥 ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-// Added getDoc, query, where for deleting keys automatically
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -91,20 +90,25 @@ async function handleActionClick(e) {
         if(confirm("⚠️ WARNING: Are you sure you want to permanently DELETE this user and their associated Security Key?")) {
             target.innerText = "Deleting..."; target.disabled = true;
             try {
-                // 🔥 NEW LOGIC: पहले चेक करें कि कौन सी Key इस्तेमाल हुई थी, और उसे उड़ाएं 🔥
+                // 🔥 FIXED LOGIC: forEach की जगह for...of लूप 🔥
                 if (collectionName === "shop_admins") {
                     const adminDoc = await getDoc(doc(db, collectionName, docId));
                     if (adminDoc.exists()) {
                         const adminData = adminDoc.data();
-                        // जो भी Key यूज़र ने सेव की थी उसे ढूँढें (secretCode या securityKey के नाम से)
-                        const usedKey = adminData.secretCode || adminData.securityKey || adminData.key; 
+                        
+                        // आपके डेटाबेस में Key जिस भी नाम से सेव हो रही हो, वह यहाँ कैच हो जाएगी
+                        const usedKey = adminData.secretCode || adminData.securityKey || adminData.key || adminData.adminKey; 
                         
                         if (usedKey) {
                             const keyQ = query(collection(db, "security_keys"), where("secretCode", "==", usedKey));
                             const keySnap = await getDocs(keyQ);
-                            keySnap.forEach(async (kDoc) => {
+                            
+                            // यह पूरा इंतज़ार करेगा डेटाबेस से 'Key' के उड़ने का
+                            for (const kDoc of keySnap.docs) {
                                 await deleteDoc(doc(db, "security_keys", kDoc.id));
-                            });
+                            }
+                        } else {
+                            console.log("⚠️ No linked key found for this admin in database.");
                         }
                     }
                 }
@@ -118,6 +122,7 @@ async function handleActionClick(e) {
 
                 alert("✅ User and their associated Security Key deleted permanently!");
             } catch(err) {
+                console.error(err);
                 alert("❌ Error deleting."); target.innerText = "Delete"; target.disabled = false;
             }
         }
@@ -239,5 +244,4 @@ if (btnGenerateKey) {
             btnGenerateKey.disabled = false;
         }
     });
-                                                    }
-      
+}
