@@ -1,6 +1,6 @@
 // === 🔥 FIREBASE SETUP 🔥 ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, serverTimestamp, getDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC0P1T-OxFHBYSWq9m5xHdL-tiDdQXsgsY",
@@ -21,27 +21,32 @@ async function loadShopAdmins() {
     try {
         const snapshot = await getDocs(collection(db, "shop_admins"));
         masterAdminTableBody.innerHTML = ""; 
-        if(snapshot.empty) {
-            masterAdminTableBody.innerHTML = "<tr><td colspan='4' style='text-align:center; color:#888;'>No Shop Admins Registered Yet.</td></tr>";
-            return;
-        }
+        let count = 0;
+        
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
-            const statusText = data.status || "Active";
-            const statusClass = statusText === "Blocked" ? "status-blocked" : "status-active";
-            const btnText = statusText === "Blocked" ? "Unblock" : "Block";
-            const btnColor = statusText === "Blocked" ? "#10b981" : "#ef4444";
-            masterAdminTableBody.innerHTML += `
-                <tr>
-                    <td>Shop Owner</td>
-                    <td>${data.mobile}</td>
-                    <td><span class="${statusClass}">${statusText}</span></td>
-                    <td>
-                        <button class="btn-block" data-id="${docSnap.id}" data-type="shop_admins" style="background-color: ${btnColor}">${btnText}</button>
-                        <button class="btn-delete-super" data-id="${docSnap.id}" data-type="shop_admins">Delete</button>
-                    </td>
-                </tr>`;
+            // 🛡️ SOFT DELETE: सिर्फ वही दिखाएं जो डिलीट नहीं हुए हैं
+            if (data.isDeleted !== true) {
+                count++;
+                const statusText = data.status || "Active";
+                const statusClass = statusText === "Blocked" ? "status-blocked" : "status-active";
+                const btnText = statusText === "Blocked" ? "Unblock" : "Block";
+                const btnColor = statusText === "Blocked" ? "#10b981" : "#ef4444";
+                masterAdminTableBody.innerHTML += `
+                    <tr>
+                        <td>Shop Owner</td>
+                        <td>${data.mobile}</td>
+                        <td><span class="${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn-block" data-id="${docSnap.id}" data-type="shop_admins" style="background-color: ${btnColor}">${btnText}</button>
+                            <button class="btn-delete-super" data-id="${docSnap.id}" data-type="shop_admins">Delete</button>
+                        </td>
+                    </tr>`;
+            }
         });
+        if(count === 0) {
+            masterAdminTableBody.innerHTML = "<tr><td colspan='4' style='text-align:center; color:#888;'>No Shop Admins Registered Yet.</td></tr>";
+        }
     } catch (error) { masterAdminTableBody.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data!</td></tr>"; }
 }
 
@@ -52,27 +57,32 @@ async function loadCustomers() {
     try {
         const snapshot = await getDocs(collection(db, "customers"));
         masterCustomerTableBody.innerHTML = ""; 
-        if(snapshot.empty) {
-            masterCustomerTableBody.innerHTML = "<tr><td colspan='4' style='text-align:center; color:#888;'>No Customers Registered Yet.</td></tr>";
-            return;
-        }
+        let count = 0;
+        
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
-            const statusText = data.status || "Active";
-            const statusClass = statusText === "Blocked" ? "status-blocked" : "status-active";
-            const btnText = statusText === "Blocked" ? "Unblock" : "Block";
-            const btnColor = statusText === "Blocked" ? "#10b981" : "#ef4444";
-            masterCustomerTableBody.innerHTML += `
-                <tr>
-                    <td>${data.name || "Customer"}</td>
-                    <td>${data.phone}</td>
-                    <td><span class="${statusClass}">${statusText}</span></td>
-                    <td>
-                        <button class="btn-block" data-id="${docSnap.id}" data-type="customers" style="background-color: ${btnColor}">${btnText}</button>
-                        <button class="btn-delete-super" data-id="${docSnap.id}" data-type="customers">Delete</button>
-                    </td>
-                </tr>`;
+            // 🛡️ SOFT DELETE
+            if (data.isDeleted !== true) {
+                count++;
+                const statusText = data.status || "Active";
+                const statusClass = statusText === "Blocked" ? "status-blocked" : "status-active";
+                const btnText = statusText === "Blocked" ? "Unblock" : "Block";
+                const btnColor = statusText === "Blocked" ? "#10b981" : "#ef4444";
+                masterCustomerTableBody.innerHTML += `
+                    <tr>
+                        <td>${data.name || "Customer"}</td>
+                        <td>${data.phone}</td>
+                        <td><span class="${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn-block" data-id="${docSnap.id}" data-type="customers" style="background-color: ${btnColor}">${btnText}</button>
+                            <button class="btn-delete-super" data-id="${docSnap.id}" data-type="customers">Delete</button>
+                        </td>
+                    </tr>`;
+            }
         });
+        if(count === 0) {
+            masterCustomerTableBody.innerHTML = "<tr><td colspan='4' style='text-align:center; color:#888;'>No Customers Registered Yet.</td></tr>";
+        }
     } catch (error) { masterCustomerTableBody.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data!</td></tr>"; }
 }
 
@@ -87,40 +97,34 @@ async function handleActionClick(e) {
     const collectionName = target.dataset.type;
 
     if (target.classList.contains('btn-delete-super') && !target.classList.contains('btn-delete-key')) {
-        if(confirm("⚠️ WARNING: Are you sure you want to permanently DELETE this user and their associated Security Key?")) {
+        if(confirm("⚠️ WARNING: Are you sure you want to DELETE this user and their associated Security Key?")) {
             target.innerText = "Deleting..."; target.disabled = true;
             try {
-                // 🔥 FIXED LOGIC: forEach की जगह for...of लूप 🔥
                 if (collectionName === "shop_admins") {
                     const adminDoc = await getDoc(doc(db, collectionName, docId));
                     if (adminDoc.exists()) {
                         const adminData = adminDoc.data();
-                        
-                        // आपके डेटाबेस में Key जिस भी नाम से सेव हो रही हो, वह यहाँ कैच हो जाएगी
                         const usedKey = adminData.secretCode || adminData.securityKey || adminData.key || adminData.adminKey; 
                         
                         if (usedKey) {
                             const keyQ = query(collection(db, "security_keys"), where("secretCode", "==", usedKey));
                             const keySnap = await getDocs(keyQ);
                             
-                            // यह पूरा इंतज़ार करेगा डेटाबेस से 'Key' के उड़ने का
                             for (const kDoc of keySnap.docs) {
-                                await deleteDoc(doc(db, "security_keys", kDoc.id));
+                                // 🛡️ SOFT DELETE KEY
+                                await updateDoc(doc(db, "security_keys", kDoc.id), { isDeleted: true });
                             }
-                        } else {
-                            console.log("⚠️ No linked key found for this admin in database.");
                         }
                     }
                 }
 
-                // अब एडमिन अकाउंट को उड़ा दें
-                await deleteDoc(doc(db, collectionName, docId));
+                // 🛡️ SOFT DELETE USER (Admin/Customer)
+                await updateDoc(doc(db, collectionName, docId), { isDeleted: true });
                 target.closest('tr').remove();
 
-                // की (Key) वाली टेबल को रीफ्रेश कर दें
                 if(typeof loadSecurityKeys === 'function') loadSecurityKeys();
 
-                alert("✅ User and their associated Security Key deleted permanently!");
+                alert("✅ User and their associated Security Key removed!");
             } catch(err) {
                 console.error(err);
                 alert("❌ Error deleting."); target.innerText = "Delete"; target.disabled = false;
@@ -162,13 +166,20 @@ async function loadSecurityKeys() {
         const snapshot = await getDocs(collection(db, "security_keys"));
         keyTableBody.innerHTML = "";
         
-        if(snapshot.empty) {
+        let keysArray = [];
+        snapshot.forEach(docSnap => { 
+            const data = docSnap.data();
+            // 🛡️ SOFT DELETE CHECK
+            if (data.isDeleted !== true) {
+                keysArray.push({ id: docSnap.id, ...data }); 
+            }
+        });
+
+        if(keysArray.length === 0) {
             keyTableBody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:#888;'>No keys generated yet.</td></tr>";
             return;
         }
 
-        let keysArray = [];
-        snapshot.forEach(docSnap => { keysArray.push({ id: docSnap.id, ...docSnap.data() }); });
         keysArray.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
         keysArray.forEach(data => {
@@ -193,11 +204,12 @@ async function loadSecurityKeys() {
 
         document.querySelectorAll('.btn-delete-key').forEach(btn => {
             btn.addEventListener('click', async (e) => {
-                if(confirm("⚠️ Are you sure you want to delete this unused key? It will be permanently removed.")) {
+                if(confirm("⚠️ Are you sure you want to delete this unused key?")) {
                     const id = e.target.getAttribute('data-id');
                     e.target.innerText = "Deleting..."; e.target.disabled = true;
                     try {
-                        await deleteDoc(doc(db, "security_keys", id));
+                        // 🛡️ SOFT DELETE KEY
+                        await updateDoc(doc(db, "security_keys", id), { isDeleted: true });
                         loadSecurityKeys(); 
                     } catch(err) {
                         alert("❌ Error deleting key.");
@@ -244,4 +256,5 @@ if (btnGenerateKey) {
             btnGenerateKey.disabled = false;
         }
     });
-}
+                  }
+          
