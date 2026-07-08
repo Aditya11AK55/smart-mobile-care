@@ -1,6 +1,6 @@
 // === 🔥 FIREBASE SETUP 🔥 ===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc, updateDoc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC0P1T-OxFHBYSWq9m5xHdL-tiDdQXsgsY",
@@ -41,7 +41,7 @@ async function verifyAdminSession() {
 }
 verifyAdminSession();
 
-// === 🌟 REPAIR TRACKING MANAGEMENT (OWNERSHIP LOGIC) 🌟 ===
+// === 🌟 REPAIR TRACKING MANAGEMENT (SOFT DELETE) 🌟 ===
 const repairCustName = document.getElementById('repairCustName');
 const repairCustPhone = document.getElementById('repairCustPhone');
 const repairDevice = document.getElementById('repairDevice');
@@ -51,36 +51,70 @@ const repairTableBody = document.getElementById('repairTableBody');
 async function loadRepairs() {
     repairTableBody.innerHTML = "<tr><td colspan='5'>Loading... ⏳</td></tr>";
     try {
-        // सिर्फ इस दुकानदार का डेटा लोड करें
         const q = query(collection(db, "repairs"), where("adminPhone", "==", loggedInUser));
         const querySnapshot = await getDocs(q);
         repairTableBody.innerHTML = ""; 
-        
-        if(querySnapshot.empty) {
-            repairTableBody.innerHTML = "<tr><td colspan='5'>No active repairs found.</td></tr>";
-            return;
-        }
+        let count = 0;
 
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const repId = docSnap.id;
-            repairTableBody.innerHTML += `
-                <tr>
-                    <td style="font-weight: bold; color: #2563eb;">${data.trackingId}</td>
-                    <td><b>${data.name}</b><br><small>${data.phone}</small></td>
-                    <td>${data.device}</td>
-                    <td>
-                        <select class="admin-input status-dropdown" data-id="${repId}">
-                            <option value="Received" ${data.status === 'Received' ? 'selected' : ''}>📥 Received</option>
-                            <option value="Repairing" ${data.status === 'Repairing' ? 'selected' : ''}>⏳ Repairing</option>
-                            <option value="Ready for Pickup" ${data.status === 'Ready for Pickup' ? 'selected' : ''}>✅ Ready</option>
-                            <option value="Delivered" ${data.status === 'Delivered' ? 'selected' : ''}>🚀 Delivered</option>
-                        </select>
-                    </td>
-                    <td><button class="btn-delete repair-delete" data-id="${repId}">Delete</button></td>
-                </tr>
-            `;
+            
+            // 🛡️ SOFT DELETE LOGIC: अगर डेटा डिलीटेड नहीं है, तभी टेबल में दिखाएं
+            if (data.isDeleted !== true) {
+                count++;
+                repairTableBody.innerHTML += `
+                    <tr>
+                        <td style="font-weight: bold; color: #2563eb;">${data.trackingId}</td>
+                        <td><b>${data.name}</b><br><small>${data.phone}</small></td>
+                        <td>${data.device}</td>
+                        <td>
+                            <select class="admin-input status-dropdown" data-id="${repId}">
+                                <option value="Received" ${data.status === 'Received' ? 'selected' : ''}>📥 Received</option>
+                                <option value="Repairing" ${data.status === 'Repairing' ? 'selected' : ''}>⏳ Repairing</option>
+                                <option value="Ready for Pickup" ${data.status === 'Ready for Pickup' ? 'selected' : ''}>✅ Ready</option>
+                                <option value="Delivered" ${data.status === 'Delivered' ? 'selected' : ''}>🚀 Delivered</option>
+                            </select>
+                        </td>
+                        <td><button class="btn-delete repair-delete" data-id="${repId}">Delete</button></td>
+                    </tr>
+                `;
+            }
         });
+
+        if(count === 0) {
+            repairTableBody.innerHTML = "<tr><td colspan='5'>No active repairs found.</td></tr>";
+        }
+
+        // Status Update Logic
+        document.querySelectorAll('.status-dropdown').forEach(dropdown => {
+            dropdown.addEventListener('change', async (e) => {
+                const id = e.target.getAttribute('data-id');
+                const newStatus = e.target.value;
+                try {
+                    await updateDoc(doc(db, "repairs", id), { status: newStatus });
+                } catch(err) { alert("❌ Error updating status!"); }
+            });
+        });
+
+        // 🗑️ Soft Delete Repair Logic
+        document.querySelectorAll('.repair-delete').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                if(confirm("⚠️ Are you sure you want to delete this repair job?")) {
+                    const id = e.target.getAttribute('data-id');
+                    e.target.innerText = "Deleting...";
+                    try {
+                        // असली deleteDoc की जगह updateDoc का इस्तेमाल कर रहे हैं
+                        await updateDoc(doc(db, "repairs", id), { isDeleted: true });
+                        loadRepairs(); // टेबल रीफ्रेश करें
+                    } catch(err) {
+                        alert("❌ Could not delete.");
+                        e.target.innerText = "Delete";
+                    }
+                }
+            });
+        });
+
     } catch (e) { repairTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error!</td></tr>"; }
 }
 loadRepairs();
@@ -93,7 +127,7 @@ btnAddRepair.addEventListener('click', async () => {
             phone: repairCustPhone.value,
             device: repairDevice.value,
             status: "Received",
-            adminPhone: loggedInUser, // 🔥 Ownership Tag Added
+            adminPhone: loggedInUser,
             createdAt: serverTimestamp()
         });
         alert("✅ Added!");
@@ -101,15 +135,18 @@ btnAddRepair.addEventListener('click', async () => {
     } catch(e) { alert("Error!"); }
 });
 
-// === 🛒 PRODUCTS MANAGEMENT (OWNERSHIP LOGIC) ===
+// === 🛒 PRODUCTS MANAGEMENT (SOFT DELETE) ===
 const btnAddProduct = document.getElementById('btnAddProduct');
+const adminProductTableBody = document.getElementById('adminProductTableBody');
+const statProducts = document.getElementById('statProducts');
+
 btnAddProduct.addEventListener('click', async () => {
     try {
         await addDoc(collection(db, "products"), {
             category: document.getElementById('productCategory').value,
             name: document.getElementById('productName').value,
             price: document.getElementById('productPrice').value,
-            adminPhone: loggedInUser, // 🔥 Ownership Tag Added
+            adminPhone: loggedInUser,
             createdAt: serverTimestamp()
         });
         alert("✅ Product Added!");
@@ -121,10 +158,60 @@ async function loadProducts() {
     try {
         const q = query(collection(db, "products"), where("adminPhone", "==", loggedInUser));
         const querySnapshot = await getDocs(q);
-        // (बाकी टेबल रेंडरिंग लॉजिक आपका वही रहेगा)
-        // ध्यान दें: डिलीट करने के लिए भी आप deleteDoc का उपयोग इसी तरह करेंगे
+        
+        if (adminProductTableBody) adminProductTableBody.innerHTML = ""; 
+        let count = 0;
+
+        querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            
+            // 🛡️ SOFT DELETE LOGIC: अगर डिलीटेड नहीं है, तभी दिखाएं
+            if (data.isDeleted !== true) {
+                count++;
+                if (adminProductTableBody) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${data.category || ''}</td>
+                        <td>${data.name}</td>
+                        <td>${data.price}</td>
+                        <td><button class="btn-delete product-delete" data-id="${docSnap.id}">Delete</button></td>
+                    `;
+                    adminProductTableBody.appendChild(newRow);
+                }
+            }
+        });
+        
+        if (statProducts) statProducts.innerText = count; // टोटल नंबर अपडेट करें
+        if(count === 0 && adminProductTableBody) {
+            adminProductTableBody.innerHTML = "<tr><td colspan='4'>No products found. Add one above!</td></tr>";
+        }
     } catch(e) { console.error(e); }
+}
+loadProducts();
+
+// 🗑️ Soft Delete Product Logic
+if (adminProductTableBody) {
+    adminProductTableBody.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('product-delete') || e.target.classList.contains('btn-delete')) {
+            if (confirm("⚠️ क्या आप वाकई इस प्रोडक्ट को हटाना चाहते हैं?")) {
+                const btn = e.target;
+                const productId = btn.getAttribute("data-id");
+                btn.innerText = "Deleting...";
+                btn.disabled = true;
+                try {
+                    // असली deleteDoc की जगह updateDoc
+                    await updateDoc(doc(db, "products", productId), { isDeleted: true });
+                    alert("✅ प्रोडक्ट हटा दिया गया!");
+                    loadProducts(); // टेबल रीफ्रेश
+                } catch (error) {
+                    alert("❌ एरर: प्रोडक्ट नहीं हट सका।");
+                    btn.innerText = "Delete";
+                    btn.disabled = false;
+                }
+            }
+        }
+    });
 }
 
 // === SHOP SETTINGS & OTHER LOGICS (SAME AS BEFORE) ===
-// (आपकी पुरानी शॉप क्लोजर और ऑफर वाली लॉजिक यहाँ नीचे जोड़ दें)
+// (आपकी पुरानी शॉप क्लोजर और ऑफर वाली लॉजिक जो पहले थी, वो आप यहाँ नीचे जोड़ सकते हैं)
